@@ -1,0 +1,7 @@
+Guia de como hacer el proyecto
+
+1) Interfaz grafica= PySide6
+
+2) Base de Daots= --- Maria ---
+
+3) Compilador - Enlazador)
