@@ -16,322 +16,780 @@
   <property name="styleSheet">
    <string notr="true"/>
   </property>
-  <widget class="QWidget" name="Icono_Widget" native="true">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>20</y>
-     <width>101</width>
-     <height>461</height>
-    </rect>
+  <layout class="QGridLayout" name="gridLayout">
+   <property name="leftMargin">
+    <number>0</number>
    </property>
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>0</y>
-      <width>40</width>
-      <height>40</height>
-     </rect>
-    </property>
-    <property name="minimumSize">
-     <size>
-      <width>40</width>
-      <height>40</height>
-     </size>
-    </property>
-    <property name="maximumSize">
-     <size>
-      <width>40</width>
-      <height>40</height>
-     </size>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="pixmap">
-     <pixmap resource="recursos.qrc">:/Iconos/person_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</pixmap>
-    </property>
-    <property name="scaledContents">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>70</y>
-      <width>81</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>PushButton</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_2">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>100</y>
-      <width>81</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>PushButton</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_3">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>130</y>
-      <width>81</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>PushButton</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_4">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>160</y>
-      <width>81</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>PushButton</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_5">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>190</y>
-      <width>81</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>PushButton</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_11">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>430</y>
-      <width>81</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>PushButton</string>
-    </property>
-   </widget>
-  </widget>
-  <widget class="QWidget" name="Name_Widget" native="true">
-   <property name="geometry">
-    <rect>
-     <x>130</x>
-     <y>20</y>
-     <width>101</width>
-     <height>461</height>
-    </rect>
+   <property name="topMargin">
+    <number>0</number>
    </property>
-   <widget class="QLabel" name="label_2">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>49</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>TextLabel</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_3">
-    <property name="geometry">
-     <rect>
-      <x>60</x>
-      <y>10</y>
-      <width>49</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>TextLabel</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_17">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>190</y>
-      <width>81</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>PushButton</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_16">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>70</y>
-      <width>81</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>PushButton</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_15">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>100</y>
-      <width>81</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>PushButton</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_13">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>160</y>
-      <width>81</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>PushButton</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_14">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>130</y>
-      <width>81</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>PushButton</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_12">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>430</y>
-      <width>81</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>PushButton</string>
-    </property>
-   </widget>
-  </widget>
-  <widget class="QWidget" name="Men_principal_Widget" native="true">
-   <property name="geometry">
-    <rect>
-     <x>240</x>
-     <y>20</y>
-     <width>421</width>
-     <height>461</height>
-    </rect>
+   <property name="rightMargin">
+    <number>0</number>
    </property>
-   <widget class="QWidget" name="Encabezado" native="true">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>401</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <widget class="QPushButton" name="pushButton_18">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>0</y>
-       <width>51</width>
-       <height>26</height>
-      </rect>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item row="0" column="0">
+    <widget class="QWidget" name="Icono_Widget" native="true">
+     <property name="styleSheet">
+      <string notr="true">QWidget{
+     
+	background-color: rgb(155, 155, 221);
+}
+
+QPushButton {
+	
+	color: white;
+	height:30px;
+	border:none;
+	border-radius:10px;
+}
+
+QPushButton:checked{
+	background-color: #F5FAFE;
+	color:#1F95EF;
+	font-weight:bold;
+	
+}</string>
      </property>
-     <property name="text">
-      <string>PushButton</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_20">
-     <property name="geometry">
-      <rect>
-       <x>350</x>
-       <y>0</y>
-       <width>51</width>
-       <height>26</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>PushButton</string>
-     </property>
-    </widget>
-    <widget class="QWidget" name="">
-     <property name="geometry">
-      <rect>
-       <x>110</x>
-       <y>0</y>
-       <width>199</width>
-       <height>28</height>
-      </rect>
-     </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
+     <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <widget class="QLineEdit" name="lineEdit"/>
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <widget class="QLabel" name="Persona">
+          <property name="minimumSize">
+           <size>
+            <width>40</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>40</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="pixmap">
+           <pixmap resource="recursos.qrc">:/Iconos/person_50dp_000000_FILL0_wght400_GRAD0_opsz48.png</pixmap>
+          </property>
+          <property name="scaledContents">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_19">
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <property name="spacing">
+         <number>15</number>
+        </property>
+        <property name="topMargin">
+         <number>15</number>
+        </property>
+        <item>
+         <widget class="QPushButton" name="Panel_icono">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="recursos.qrc">
+            <normaloff>:/Iconos/dashboard_customize_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</normaloff>
+            <normalon>:/Iconos/dashboard_customize_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</normalon>:/Iconos/dashboard_customize_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</iconset>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="autoExclusive">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="Perfil_icono">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="recursos.qrc">
+            <normaloff>:/Iconos/person_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</normaloff>
+            <normalon>:/Iconos/person_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</normalon>:/Iconos/person_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</iconset>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="autoExclusive">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="Analizis_icono">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="recursos.qrc">
+            <normaloff>:/Iconos/analytics_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</normaloff>
+            <normalon>:/Iconos/analytics_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</normalon>:/Iconos/analytics_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</iconset>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="autoExclusive">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="Noticias_icono">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="recursos.qrc">
+            <normaloff>:/Iconos/notifications_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</normaloff>
+            <normalon>:/Iconos/notifications_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</normalon>:/Iconos/notifications_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</iconset>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="autoExclusive">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="Ajustes_icono">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="recursos.qrc">
+            <normaloff>:/Iconos/settings_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</normaloff>
+            <normalon>:/Iconos/settings_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</normalon>:/Iconos/settings_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</iconset>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="autoExclusive">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <spacer name="Barra_Espacio">
+        <property name="orientation">
+         <enum>Qt::Orientation::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>104</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="cerrar_sesion_Icono">
         <property name="text">
-         <string>PushButton</string>
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="recursos.qrc">
+          <normaloff>:/Iconos/power_settings_new_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</normaloff>:/Iconos/power_settings_new_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</iconset>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <property name="autoExclusive">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
      </layout>
     </widget>
-   </widget>
-   <widget class="QStackedWidget" name="stackedWidget">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>130</y>
-      <width>40</width>
-      <height>301</height>
-     </rect>
-    </property>
-    <widget class="QWidget" name="page"/>
-    <widget class="QWidget" name="page_2"/>
-   </widget>
-  </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="QWidget" name="Mainn_principal_Widget" native="true">
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(189, 180, 222);</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_6">
+      <item>
+       <widget class="QWidget" name="Encabezado" native="true">
+        <layout class="QVBoxLayout" name="verticalLayout_5">
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <widget class="QPushButton" name="Menu_icono">
+             <property name="styleSheet">
+              <string notr="true">border:none;</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="recursos.qrc">
+               <normaloff>:/Iconos/menu_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</normaloff>:/Iconos/menu_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>20</width>
+               <height>20</height>
+              </size>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+             <property name="autoExclusive">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Orientation::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>18</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout">
+             <item>
+              <widget class="QLineEdit" name="Buscador_Qline"/>
+             </item>
+             <item>
+              <widget class="QPushButton" name="Buscador_icono">
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="recursos.qrc">
+                 <normaloff>:/Iconos/search_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</normaloff>:/Iconos/search_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>20</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Orientation::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="perfil_buscador_icono">
+             <property name="styleSheet">
+              <string notr="true">border:none;</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="recursos.qrc">
+               <normaloff>:/Iconos/account_circle_48dp_000000_FILL0_wght400_GRAD0_opsz48.png</normaloff>:/Iconos/account_circle_48dp_000000_FILL0_wght400_GRAD0_opsz48.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>24</width>
+               <height>24</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QStackedWidget" name="MultiVentanas_Widget">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(255, 255, 255);</string>
+        </property>
+        <property name="currentIndex">
+         <number>2</number>
+        </property>
+        <widget class="QWidget" name="Panel"/>
+        <widget class="QWidget" name="Noticias"/>
+        <widget class="QWidget" name="Ajustes"/>
+        <widget class="QWidget" name="Analizis"/>
+        <widget class="QWidget" name="Perfil"/>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QWidget" name="Nombres_Widget" native="true">
+     <property name="styleSheet">
+      <string notr="true">QWidget{
+     
+	background-color: rgb(155, 155, 221);
+	color:white;
+}
+
+QPushButton {
+	color:white;
+	text-align:left;
+	height:30px;
+	border:none;
+	padding-left:10px;
+	border-top-left-radius:10px;
+	border-bottom-left-radius:10px;
+}
+
+QPushButton:checked{
+	background-color: #F5FAFE;
+	color:#1F95EF;
+	font-weight:bold;
+	
+}</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_4">
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>20</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="Perfil_nombre">
+          <property name="minimumSize">
+           <size>
+            <width>40</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>40</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="pixmap">
+           <pixmap resource="recursos.qrc">:/Iconos/person_50dp_000000_FILL0_wght400_GRAD0_opsz48.png</pixmap>
+          </property>
+          <property name="scaledContents">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="Nombre_usuarios">
+          <property name="font">
+           <font>
+            <family>Inter</family>
+            <pointsize>12</pointsize>
+            <italic>false</italic>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Nombre</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <property name="spacing">
+         <number>15</number>
+        </property>
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>15</number>
+        </property>
+        <item>
+         <widget class="QPushButton" name="panel_nombre">
+          <property name="text">
+           <string>Panel</string>
+          </property>
+          <property name="icon">
+           <iconset resource="recursos.qrc">
+            <normaloff>:/Iconos/dashboard_customize_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</normaloff>
+            <normalon>:/Iconos/dashboard_customize_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</normalon>:/Iconos/dashboard_customize_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</iconset>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="autoExclusive">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="perfil_nombre">
+          <property name="text">
+           <string>Perfil</string>
+          </property>
+          <property name="icon">
+           <iconset resource="recursos.qrc">
+            <normaloff>:/Iconos/person_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</normaloff>
+            <normalon>:/Iconos/person_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</normalon>:/Iconos/person_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</iconset>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="autoExclusive">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="analizis_nombre">
+          <property name="text">
+           <string>Analizis</string>
+          </property>
+          <property name="icon">
+           <iconset resource="recursos.qrc">
+            <normaloff>:/Iconos/analytics_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</normaloff>
+            <normalon>:/Iconos/analytics_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</normalon>:/Iconos/analytics_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</iconset>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="autoExclusive">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="noticias_nombre">
+          <property name="text">
+           <string>Noticias</string>
+          </property>
+          <property name="icon">
+           <iconset resource="recursos.qrc">
+            <normaloff>:/Iconos/notifications_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</normaloff>
+            <normalon>:/Iconos/notifications_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</normalon>:/Iconos/notifications_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</iconset>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="autoExclusive">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="ajustes_nombre">
+          <property name="text">
+           <string>Ajustes</string>
+          </property>
+          <property name="icon">
+           <iconset resource="recursos.qrc">
+            <normaloff>:/Iconos/settings_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</normaloff>
+            <normalon>:/Iconos/settings_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</normalon>:/Iconos/settings_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</iconset>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+          <property name="autoExclusive">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <spacer name="verticalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Orientation::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>164</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="cerrar_sesion">
+        <property name="text">
+         <string>Cerrar Sesion</string>
+        </property>
+        <property name="icon">
+         <iconset resource="recursos.qrc">
+          <normaloff>:/Iconos/power_settings_new_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</normaloff>:/Iconos/power_settings_new_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</iconset>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <property name="autoExclusive">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <resources>
   <include location="recursos.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>Menu_icono</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>Icono_Widget</receiver>
+   <slot>setHidden(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>253</x>
+     <y>44</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>55</x>
+     <y>323</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Noticias_icono</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>noticias_nombre</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>26</x>
+     <y>223</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>122</x>
+     <y>228</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Analizis_icono</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>analizis_nombre</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>26</x>
+     <y>179</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>105</x>
+     <y>170</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Panel_icono</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>panel_nombre</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>24</x>
+     <y>88</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>113</x>
+     <y>89</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Perfil_icono</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>perfil_nombre</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>36</x>
+     <y>127</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>101</x>
+     <y>132</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ajustes_nombre</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>Ajustes_icono</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>102</x>
+     <y>263</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>26</x>
+     <y>271</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Ajustes_icono</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>ajustes_nombre</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>36</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>100</x>
+     <y>260</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>analizis_nombre</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>Analizis_icono</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>137</x>
+     <y>179</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>20</x>
+     <y>184</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>perfil_nombre</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>Perfil_icono</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>128</x>
+     <y>139</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>18</x>
+     <y>133</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>panel_nombre</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>Panel_icono</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>157</x>
+     <y>86</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>30</x>
+     <y>97</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>noticias_nombre</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>Noticias_icono</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>113</x>
+     <y>215</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>21</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Menu_icono</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>Nombres_Widget</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>233</x>
+     <y>43</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>163</x>
+     <y>303</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cerrar_sesion_Icono</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>Dialog</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>30</x>
+     <y>466</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>32</x>
+     <y>508</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cerrar_sesion</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>Dialog</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>153</x>
+     <y>456</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>139</x>
+     <y>506</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
