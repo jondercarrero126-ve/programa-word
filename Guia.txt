@@ -5,3 +5,27 @@ Guia de como hacer el proyecto
 2) Base de Daots= --- Maria ---
 
 3) Compilador - Enlazador)
+
+
+
+
+------
+
+
+
+
+
+
+
+
+Me siento tonto necesito hacer algo pero no puedo de cierta forma las cosas no estan funcionando realmente siento que las cosas no funcionan 
+existen 
+1)novel
+2)trabajo
+3)familia
+4)deseo
+5)pensamiento
+>> (>) y menor que (<
+
+pyside6-uic .\UI\principal.ui > ui_principal.py
+pyside6-rcc .\UI\recursos.qrc -o recursos_rc.py
