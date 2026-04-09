@@ -1,5 +1,5 @@
 <RCC>
-  <qresource>
+  <qresource prefix="/">
     <file>Iconos/account_circle_48dp_000000_FILL0_wght400_GRAD0_opsz48.png</file>
     <file>Iconos/analytics_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</file>
     <file>Iconos/analytics_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</file>
@@ -15,54 +15,6 @@
     <file>Iconos/person_50dp_000000_FILL0_wght400_GRAD0_opsz48.png</file>
     <file>Iconos/power_settings_new_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</file>
     <file>Iconos/power_settings_new_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/search_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/settings_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/settings_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/analytics_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/analytics_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/dashboard_customize_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/dashboard_customize_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/login_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/logout_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/menu_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/notifications_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/notifications_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/person_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/person_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/power_settings_new_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/power_settings_new_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/search_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/settings_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/settings_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/menu_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/power_settings_new_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/power_settings_new_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/analytics_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/analytics_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/analytics_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/analytics_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/dashboard_customize_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/dashboard_customize_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/login_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/logout_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/menu_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/notifications_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/notifications_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/person_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/person_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/power_settings_new_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/power_settings_new_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/search_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/settings_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/settings_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/dashboard_customize_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/dashboard_customize_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/login_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/logout_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/notifications_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/notifications_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/person_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</file>
-    <file>Iconos/person_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</file>
     <file>Iconos/search_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</file>
     <file>Iconos/settings_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</file>
     <file>Iconos/settings_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png</file>

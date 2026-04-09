@@ -1,12 +1,10 @@
-from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton
+from PySide6.QtWidgets import QApplication
 import sys
-from principal import Principal
+from login import Login
 
 app = QApplication(sys.argv)
 
+login_window = Login()
+login_window.show()
 
-window = Principal()
-
-
-window.show()
 app.exec()

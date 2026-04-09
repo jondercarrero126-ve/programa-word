@@ -6,52 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>639</width>
-    <height>430</height>
+    <width>900</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Gestion de Tesis</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <property name="leftMargin">
-     <number>0</number>
-    </property>
-    <property name="topMargin">
-     <number>0</number>
-    </property>
-    <property name="rightMargin">
-     <number>0</number>
-    </property>
-    <property name="bottomMargin">
-     <number>0</number>
-    </property>
-    <property name="horizontalSpacing">
-     <number>6</number>
-    </property>
     <item row="0" column="0">
      <widget class="QWidget" name="Icono_Widget" native="true">
       <property name="styleSheet">
-       <string notr="true">QWidget{
-     
-	background-color: rgb(155, 155, 221);
-}
-
-QPushButton {
-	
-	color: white;
-	height:30px;
-	border:none;
-	border-radius:10px;
-}
-
-QPushButton:checked{
-	background-color: #F5FAFE;
-	color:#1F95EF;
-	font-weight:bold;
-	
-}</string>
+       <string notr="true">QWidget{background-color: rgb(155, 155, 221);}QPushButton {color: white;height:30px;border:none;border-radius:10px;}QPushButton:checked{background-color: #F5FAFE;color:#1F95EF;font-weight:bold;}</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
@@ -219,28 +186,7 @@ QPushButton:checked{
     <item row="0" column="1">
      <widget class="QWidget" name="Nombres_Widget" native="true">
       <property name="styleSheet">
-       <string notr="true">QWidget{
-     
-	background-color: rgb(155, 155, 221);
-	color:white;
-}
-
-QPushButton {
-	color:white;
-	text-align:left;
-	height:30px;
-	border:none;
-	padding-left:10px;
-	border-top-left-radius:10px;
-	border-bottom-left-radius:10px;
-}
-
-QPushButton:checked{
-	background-color: #F5FAFE;
-	color:#1F95EF;
-	font-weight:bold;
-	
-}</string>
+       <string notr="true">QWidget{background-color: rgb(155, 155, 221);color:white;}QPushButton {color:white;text-align:left;height:30px;border:none;padding-left:10px;border-top-left-radius:10px;border-bottom-left-radius:10px;}QPushButton:checked{background-color: #F5FAFE;color:#1F95EF;font-weight:bold;}</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <property name="rightMargin">
@@ -483,30 +429,6 @@ QPushButton:checked{
              </spacer>
             </item>
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout">
-              <item>
-               <widget class="QLineEdit" name="Buscador_Qline"/>
-              </item>
-              <item>
-               <widget class="QPushButton" name="Buscador_icono">
-                <property name="text">
-                 <string/>
-                </property>
-                <property name="icon">
-                 <iconset resource="recursos.qrc">
-                  <normaloff>:/Iconos/search_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</normaloff>:/Iconos/search_24dp_000000_FILL0_wght400_GRAD0_opsz24.png</iconset>
-                </property>
-                <property name="iconSize">
-                 <size>
-                  <width>20</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
              <spacer name="horizontalSpacer_2">
               <property name="orientation">
                <enum>Qt::Orientation::Horizontal</enum>
@@ -550,112 +472,530 @@ QPushButton:checked{
           <string notr="true">background-color: rgb(255, 255, 255);</string>
          </property>
          <property name="currentIndex">
-          <number>4</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="Panel">
-          <widget class="QLabel" name="label_4">
-           <property name="geometry">
-            <rect>
-             <x>260</x>
-             <y>140</y>
-             <width>49</width>
-             <height>16</height>
-            </rect>
+          <layout class="QVBoxLayout" name="panel_layout">
+           <property name="leftMargin">
+            <number>20</number>
            </property>
-           <property name="font">
-            <font>
-             <family>Inter</family>
-             <pointsize>12</pointsize>
-            </font>
+           <property name="topMargin">
+            <number>20</number>
            </property>
-           <property name="text">
-            <string>Panel</string>
+           <property name="rightMargin">
+            <number>20</number>
            </property>
-          </widget>
-         </widget>
-         <widget class="QWidget" name="Noticias">
-          <widget class="QLabel" name="label_3">
-           <property name="geometry">
-            <rect>
-             <x>280</x>
-             <y>130</y>
-             <width>49</width>
-             <height>16</height>
-            </rect>
+           <property name="bottomMargin">
+            <number>20</number>
            </property>
-           <property name="font">
-            <font>
-             <family>Inter</family>
-             <pointsize>12</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>Noticias</string>
-           </property>
-          </widget>
-         </widget>
-         <widget class="QWidget" name="Ajustes">
-          <widget class="QLabel" name="label">
-           <property name="geometry">
-            <rect>
-             <x>150</x>
-             <y>130</y>
-             <width>49</width>
-             <height>16</height>
-            </rect>
-           </property>
-           <property name="font">
-            <font>
-             <family>Inter</family>
-             <pointsize>12</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>Ajustes</string>
-           </property>
-          </widget>
-         </widget>
-         <widget class="QWidget" name="Analizis">
-          <widget class="QLabel" name="label_2">
-           <property name="geometry">
-            <rect>
-             <x>320</x>
-             <y>160</y>
-             <width>49</width>
-             <height>16</height>
-            </rect>
-           </property>
-           <property name="font">
-            <font>
-             <family>Inter</family>
-             <pointsize>12</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>Analizis</string>
-           </property>
-          </widget>
+           <item>
+            <widget class="QLabel" name="titulo_panel">
+             <property name="font">
+              <font>
+               <family>Inter</family>
+               <pointsize>20</pointsize>
+               <weight>75</weight>
+              </font>
+             </property>
+             <property name="text">
+              <string>Gestion de Tesis</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="busqueda_layout">
+             <item>
+              <widget class="QLineEdit" name="buscador_input">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>40</height>
+                </size>
+               </property>
+               <property name="placeholderText">
+                <string>Buscar tesis por titulo o autor...</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btn_importar">
+               <property name="minimumSize">
+                <size>
+                 <width>150</width>
+                 <height>40</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Importar Word</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QTableWidget" name="tabla_tesis">
+             <property name="alternatingRowColors">
+              <bool>true</bool>
+             </property>
+             <property name="columnCount">
+              <number>5</number>
+             </property>
+             <column>
+              <property name="text">
+               <string>ID</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Titulo</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Autor</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Anio</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Estado</string>
+              </property>
+             </column>
+            </widget>
+           </item>
+          </layout>
          </widget>
          <widget class="QWidget" name="Perfil">
-          <widget class="QLabel" name="label_5">
-           <property name="geometry">
-            <rect>
-             <x>210</x>
-             <y>170</y>
-             <width>49</width>
-             <height>16</height>
-            </rect>
+          <layout class="QVBoxLayout" name="perfil_layout">
+           <property name="leftMargin">
+            <number>20</number>
            </property>
-           <property name="font">
-            <font>
-             <family>Inter</family>
-             <pointsize>12</pointsize>
-            </font>
+           <property name="topMargin">
+            <number>20</number>
            </property>
-           <property name="text">
-            <string>Perfil</string>
+           <property name="rightMargin">
+            <number>20</number>
            </property>
-          </widget>
+           <property name="bottomMargin">
+            <number>20</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="titulo_perfil">
+             <property name="font">
+              <font>
+               <family>Inter</family>
+               <pointsize>20</pointsize>
+               <weight>75</weight>
+              </font>
+             </property>
+             <property name="text">
+              <string>Perfil de Usuario</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QFrame" name="info_frame">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>180</height>
+              </size>
+             </property>
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
+             </property>
+             <layout class="QVBoxLayout" name="info_layout">
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+              <item>
+               <widget class="QLabel" name="avatar_label">
+                <property name="minimumSize">
+                 <size>
+                  <width>80</width>
+                  <height>80</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>80</width>
+                  <height>80</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">background-color: #9B9BDD;border-radius: 40px;</string>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="valor_nombre">
+                <property name="text">
+                 <string>-</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="valor_usuario">
+                <property name="text">
+                 <string>-</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="valor_email">
+                <property name="text">
+                 <string>-</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="stats_group">
+             <property name="title">
+              <string>Estadisticas Personales</string>
+             </property>
+             <layout class="QVBoxLayout" name="stats_layout">
+              <item>
+               <widget class="QLabel" name="valor_tesis">
+                <property name="text">
+                 <string>Tesis creadas: 0</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="valor_capitulos">
+                <property name="text">
+                 <string>Capitulos: 0</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="valor_refs">
+                <property name="text">
+                 <string>Referencias: 0</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="Analizis">
+          <layout class="QVBoxLayout" name="analisis_layout">
+           <property name="leftMargin">
+            <number>20</number>
+           </property>
+           <property name="topMargin">
+            <number>20</number>
+           </property>
+           <property name="rightMargin">
+            <number>20</number>
+           </property>
+           <property name="bottomMargin">
+            <number>20</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="titulo_analisis">
+             <property name="font">
+              <font>
+               <family>Inter</family>
+               <pointsize>20</pointsize>
+               <weight>75</weight>
+              </font>
+             </property>
+             <property name="text">
+              <string>Analisis de Datos</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="resumen_group">
+             <property name="title">
+              <string>Resumen General</string>
+             </property>
+             <layout class="QVBoxLayout" name="resumen_layout">
+              <item>
+               <widget class="QLabel" name="resumen_valor_tesis">
+                <property name="text">
+                 <string>Total tesis: 0</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="resumen_valor_autores">
+                <property name="text">
+                 <string>Total autores: 0</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="resumen_valor_refs">
+                <property name="text">
+                 <string>Total referencias: 0</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QTableWidget" name="tabla_anio">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>150</height>
+              </size>
+             </property>
+             <property name="alternatingRowColors">
+              <bool>true</bool>
+             </property>
+             <property name="columnCount">
+              <number>2</number>
+             </property>
+             <column>
+              <property name="text">
+               <string>Anio</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>Cantidad</string>
+              </property>
+             </column>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="Noticias">
+          <layout class="QVBoxLayout" name="noticias_layout">
+           <property name="leftMargin">
+            <number>20</number>
+           </property>
+           <property name="topMargin">
+            <number>20</number>
+           </property>
+           <property name="rightMargin">
+            <number>20</number>
+           </property>
+           <property name="bottomMargin">
+            <number>20</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="titulo_noticias">
+             <property name="font">
+              <font>
+               <family>Inter</family>
+               <pointsize>20</pointsize>
+               <weight>75</weight>
+              </font>
+             </property>
+             <property name="text">
+              <string>Historial de Actividad</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QScrollArea" name="historial_scroll">
+             <property name="widgetResizable">
+              <bool>true</bool>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>350</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QScrollArea {border: none;}</string>
+             </property>
+             <widget class="QWidget" name="historial_container">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>400</width>
+                <height>350</height>
+               </rect>
+              </property>
+              <layout class="QVBoxLayout" name="historial_layout"/>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="Ajustes">
+          <layout class="QVBoxLayout" name="ajustes_layout">
+           <property name="leftMargin">
+            <number>20</number>
+           </property>
+           <property name="topMargin">
+            <number>20</number>
+           </property>
+           <property name="rightMargin">
+            <number>20</number>
+           </property>
+           <property name="bottomMargin">
+            <number>20</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="titulo_ajustes">
+             <property name="font">
+              <font>
+               <family>Inter</family>
+               <pointsize>20</pointsize>
+               <weight>75</weight>
+              </font>
+             </property>
+             <property name="text">
+              <string>Configuracion</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="db_group">
+             <property name="title">
+              <string>Base de Datos</string>
+             </property>
+             <layout class="QFormLayout" name="db_layout">
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_host">
+                <property name="text">
+                 <string>Host:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QLineEdit" name="host_input">
+                <property name="text">
+                 <string>localhost</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_user">
+                <property name="text">
+                 <string>Usuario:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QLineEdit" name="user_input">
+                <property name="text">
+                 <string>root</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="label_pass">
+                <property name="text">
+                 <string>Contrasena:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QLineEdit" name="pass_input">
+                <property name="text">
+                 <string>admin123</string>
+                </property>
+                <property name="echoMode">
+                 <enum>QLineEdit::Password</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="label_puerto">
+                <property name="text">
+                 <string>Puerto:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QLineEdit" name="puerto_input">
+                <property name="text">
+                 <string>3306</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="db_buttons_layout">
+             <item>
+              <widget class="QPushButton" name="btn_test">
+               <property name="text">
+                <string>Probar Conexion</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btn_guardar">
+               <property name="text">
+                <string>Guardar</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="user_group">
+             <property name="title">
+              <string>Usuario</string>
+             </property>
+             <layout class="QVBoxLayout" name="user_layout">
+              <item>
+               <widget class="QPushButton" name="btn_cambiar_pass">
+                <property name="text">
+                 <string>Cambiar Contrasena</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btn_editar_perfil">
+                <property name="text">
+                 <string>Editar Perfil</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="about_group">
+             <property name="title">
+              <string>Acerca de</string>
+             </property>
+             <layout class="QVBoxLayout" name="about_layout">
+              <item>
+               <widget class="QLabel" name="about_label">
+                <property name="text">
+                 <string>Sistema de Gestion de Tesis v1.0</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
          </widget>
         </widget>
        </item>
@@ -664,6 +1004,17 @@ QPushButton:checked{
     </item>
    </layout>
   </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>900</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources>
   <include location="recursos.qrc"/>
@@ -674,224 +1025,84 @@ QPushButton:checked{
    <signal>toggled(bool)</signal>
    <receiver>MainWindow</receiver>
    <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>150</x>
-     <y>410</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>136</x>
-     <y>454</y>
-    </hint>
-   </hints>
   </connection>
   <connection>
    <sender>cerrar_sesion_Icono</sender>
    <signal>toggled(bool)</signal>
    <receiver>MainWindow</receiver>
    <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>38</x>
-     <y>408</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>36</x>
-     <y>460</y>
-    </hint>
-   </hints>
   </connection>
   <connection>
    <sender>panel_nombre</sender>
    <signal>toggled(bool)</signal>
    <receiver>Panel_icono</receiver>
    <slot>setChecked(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>89</x>
-     <y>90</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>29</x>
-     <y>84</y>
-    </hint>
-   </hints>
   </connection>
   <connection>
    <sender>perfil_nombre</sender>
    <signal>toggled(bool)</signal>
    <receiver>Perfil_icono</receiver>
    <slot>setChecked(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>112</x>
-     <y>134</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>34</x>
-     <y>140</y>
-    </hint>
-   </hints>
   </connection>
   <connection>
    <sender>analizis_nombre</sender>
    <signal>toggled(bool)</signal>
    <receiver>Analizis_icono</receiver>
    <slot>setChecked(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>106</x>
-     <y>167</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>23</x>
-     <y>171</y>
-    </hint>
-   </hints>
   </connection>
   <connection>
    <sender>noticias_nombre</sender>
    <signal>toggled(bool)</signal>
    <receiver>Noticias_icono</receiver>
    <slot>setChecked(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>99</x>
-     <y>212</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>27</x>
-     <y>220</y>
-    </hint>
-   </hints>
   </connection>
   <connection>
    <sender>ajustes_nombre</sender>
    <signal>toggled(bool)</signal>
    <receiver>Ajustes_icono</receiver>
    <slot>setChecked(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>131</x>
-     <y>264</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>42</x>
-     <y>270</y>
-    </hint>
-   </hints>
   </connection>
   <connection>
    <sender>Ajustes_icono</sender>
    <signal>toggled(bool)</signal>
    <receiver>ajustes_nombre</receiver>
    <slot>setChecked(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>31</x>
-     <y>255</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>126</x>
-     <y>256</y>
-    </hint>
-   </hints>
   </connection>
   <connection>
    <sender>Noticias_icono</sender>
    <signal>toggled(bool)</signal>
    <receiver>noticias_nombre</receiver>
    <slot>setChecked(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>20</x>
-     <y>226</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>113</x>
-     <y>216</y>
-    </hint>
-   </hints>
   </connection>
   <connection>
    <sender>Analizis_icono</sender>
    <signal>toggled(bool)</signal>
    <receiver>analizis_nombre</receiver>
    <slot>setChecked(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>32</x>
-     <y>184</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>110</x>
-     <y>180</y>
-    </hint>
-   </hints>
   </connection>
   <connection>
    <sender>Perfil_icono</sender>
    <signal>toggled(bool)</signal>
    <receiver>perfil_nombre</receiver>
    <slot>setChecked(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>22</x>
-     <y>135</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>120</x>
-     <y>128</y>
-    </hint>
-   </hints>
   </connection>
   <connection>
    <sender>Panel_icono</sender>
    <signal>toggled(bool)</signal>
    <receiver>panel_nombre</receiver>
    <slot>setChecked(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>21</x>
-     <y>74</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>158</x>
-     <y>82</y>
-    </hint>
-   </hints>
   </connection>
   <connection>
    <sender>Menu_icono</sender>
    <signal>toggled(bool)</signal>
    <receiver>Icono_Widget</receiver>
    <slot>setHidden(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>242</x>
-     <y>34</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>14</x>
-     <y>336</y>
-    </hint>
-   </hints>
   </connection>
   <connection>
    <sender>Menu_icono</sender>
    <signal>toggled(bool)</signal>
    <receiver>Nombres_Widget</receiver>
    <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>237</x>
-     <y>32</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>154</x>
-     <y>329</y>
-    </hint>
-   </hints>
   </connection>
  </connections>
 </ui>
