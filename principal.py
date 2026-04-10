@@ -12,6 +12,10 @@ from PySide6.QtWidgets import (
     QTableWidgetItem,
     QFrame,
     QScrollArea,
+    QLineEdit,
+    QRadioButton,
+    QListWidget,
+    QGroupBox,
 )
 from PySide6.QtCore import Qt, QThread, Signal, QObject
 from PySide6.QtGui import QFont
@@ -42,12 +46,134 @@ class TesisController(QObject):
     error_occurred = Signal(str)
     import_success = Signal(str)
     import_error = Signal(str)
+    categorias_changed = Signal(list)
+    filtro_aplicado = Signal(str, int)
 
     def __init__(self, db: Database, usuario: dict):
         super().__init__()
         self.db = db
         self.usuario = usuario
         self._tesis_cache = []
+        self._categorias_cache = []
+
+    def cargar_categorias(self):
+        if self.db.connect():
+            try:
+                categorias = self.db.fetch_all(
+                    "SELECT * FROM categorias WHERE id_usuario = %s ORDER BY fecha_creacion DESC",
+                    (self.usuario["id_usuario"],),
+                )
+                self._categorias_cache = categorias if categorias else []
+                self.db.disconnect()
+                self.categorias_changed.emit(self._categorias_cache)
+            except Exception as e:
+                self.db.disconnect()
+                self.error_occurred.emit(f"Error al cargar categorías: {str(e)}")
+        else:
+            self.error_occurred.emit("No se pudo conectar a la base de datos")
+
+    def crear_categoria(self, nombre: str, patron: str, tipo: str = "any"):
+        if self.db.connect():
+            try:
+                self.db.execute(
+                    """INSERT INTO categorias (nombre, patron_busqueda, tipo_busqueda, id_usuario)
+                       VALUES (%s, %s, %s, %s)""",
+                    (nombre, patron, tipo, self.usuario["id_usuario"]),
+                )
+                self.db.disconnect()
+                self.cargar_categorias()
+            except Exception as e:
+                self.db.disconnect()
+                self.error_occurred.emit(f"Error al crear categoría: {str(e)}")
+        else:
+            self.error_occurred.emit("No se pudo conectar a la base de datos")
+
+    def eliminar_categoria(self, id_categoria: int):
+        if self.db.connect():
+            try:
+                self.db.execute(
+                    "DELETE FROM categorias WHERE id_categoria = %s", (id_categoria,)
+                )
+                self.db.disconnect()
+                self.cargar_categorias()
+            except Exception as e:
+                self.db.disconnect()
+                self.error_occurred.emit(f"Error al eliminar categoría: {str(e)}")
+        else:
+            self.error_occurred.emit("No se pudo conectar a la base de datos")
+
+    def actualizar_categoria(
+        self, id_categoria: int, nombre: str, patron: str, tipo: str
+    ):
+        if self.db.connect():
+            try:
+                self.db.execute(
+                    """UPDATE categorias SET nombre = %s, patron_busqueda = %s, tipo_busqueda = %s
+                       WHERE id_categoria = %s""",
+                    (nombre, patron, tipo, id_categoria),
+                )
+                self.db.disconnect()
+                self.cargar_categorias()
+            except Exception as e:
+                self.db.disconnect()
+                self.error_occurred.emit(f"Error al actualizar categoría: {str(e)}")
+        else:
+            self.error_occurred.emit("No se pudo conectar a la base de datos")
+
+    def aplicar_filtro_categoria(self, categoria: dict):
+        patron = categoria["patron_busqueda"]
+        tipo = categoria["tipo_busqueda"]
+
+        if not patron:
+            self.tesis_changed.emit(self._tesis_cache)
+            self.filtro_aplicado.emit("", 0)
+            return
+
+        palabras = [p.strip() for p in patron.split() if p.strip()]
+
+        def matches(tesis):
+            texto = (
+                str(tesis.get("titulo", ""))
+                + " "
+                + str(tesis.get("autor_principal", ""))
+                + " "
+                + str(tesis.get("resumen", ""))
+                + " "
+                + str(tesis.get("palabras_clave", ""))
+            ).lower()
+
+            if tipo == "all":
+                return all(p.lower() in texto for p in palabras)
+            else:
+                return any(p.lower() in texto for p in palabras)
+
+        filtradas = [t for t in self._tesis_cache if matches(t)]
+        self.tesis_changed.emit(filtradas)
+        self.filtro_aplicado.emit(categoria["nombre"], len(filtradas))
+
+    def preview_filtro(self, patron: str, tipo: str = "any") -> int:
+        if not patron or not self._tesis_cache:
+            return len(self._tesis_cache)
+
+        palabras = [p.strip() for p in patron.split() if p.strip()]
+
+        def matches(tesis):
+            texto = (
+                str(tesis.get("titulo", ""))
+                + " "
+                + str(tesis.get("autor_principal", ""))
+                + " "
+                + str(tesis.get("resumen", ""))
+                + " "
+                + str(tesis.get("palabras_clave", ""))
+            ).lower()
+
+            if tipo == "all":
+                return all(p.lower() in texto for p in palabras)
+            else:
+                return any(p.lower() in texto for p in palabras)
+
+        return len([t for t in self._tesis_cache if matches(t)])
 
     def cargar_tesis(self):
         if self.db.connect():
@@ -163,6 +289,7 @@ class Principal(QMainWindow, Ui_MainWindow):
         self.usuario = usuario
         self.db = Database()
         self.controller = TesisController(self.db, usuario)
+        self._filtro_activo = None
 
         self.setupUi(self)
         self.setWindowTitle("Gestion de Tesis")
@@ -170,12 +297,123 @@ class Principal(QMainWindow, Ui_MainWindow):
         self.Nombres_Widget.setHidden(True)
         self.Nombre_usuarios.setText(usuario.get("nombre", "Usuario"))
 
+        if not hasattr(self, "input_nombre_categoria"):
+            self._crear_widgets_busquedas()
+
         self._conectar_navegacion()
         self._conectar_widgets()
         self._conectar_signals()
-        self._actualizar_perfil()
+        self._actualizar_estadisticas()
 
         self.controller.cargar_tesis()
+        self.controller.cargar_categorias()
+
+    def _crear_widgets_busquedas(self):
+        self.input_nombre_categoria = QLineEdit()
+        self.input_nombre_categoria.setPlaceholderText("Nombre de la categoría")
+        self.perfil_layout.addWidget(self.input_nombre_categoria)
+
+        self.input_patron = QLineEdit()
+        self.input_patron.setPlaceholderText(
+            "Palabras a buscar (separadas por espacio)"
+        )
+        self.perfil_layout.addWidget(self.input_patron)
+
+        tipo_group = QGroupBox("Tipo de búsqueda")
+        tipo_layout = QHBoxLayout()
+        self.radio_cualquiera = QRadioButton("Cualquiera de estas palabras (OR)")
+        self.radio_cualquiera.setChecked(True)
+        self.radio_todas = QRadioButton("Todas estas palabras (AND)")
+        tipo_layout.addWidget(self.radio_cualquiera)
+        tipo_layout.addWidget(self.radio_todas)
+        tipo_group.setLayout(tipo_layout)
+        self.perfil_layout.addWidget(tipo_group)
+
+        botones_layout = QHBoxLayout()
+        self.btn_crear_categoria = QPushButton("Crear Categoría")
+        self.btn_preview = QPushButton("Vista Previa")
+        botones_layout.addWidget(self.btn_crear_categoria)
+        botones_layout.addWidget(self.btn_preview)
+
+        botones_widget = QWidget()
+        botones_widget.setLayout(botones_layout)
+        self.perfil_layout.addWidget(botones_widget)
+
+        self.lista_categorias = QListWidget()
+        self.perfil_layout.addWidget(self.lista_categorias)
+
+        acciones_layout = QHBoxLayout()
+        btn_aplicar = QPushButton("Aplicar")
+        btn_aplicar.clicked.connect(self._aplicar_categoria)
+        btn_editar = QPushButton("Editar")
+        btn_editar.clicked.connect(self._editar_categoria)
+        btn_eliminar = QPushButton("Eliminar")
+        btn_eliminar.clicked.connect(self._eliminar_categoria)
+        acciones_layout.addWidget(btn_aplicar)
+        acciones_layout.addWidget(btn_editar)
+        acciones_layout.addWidget(btn_eliminar)
+
+        acciones_widget = QWidget()
+        acciones_widget.setLayout(acciones_layout)
+        self.perfil_layout.addWidget(acciones_widget)
+
+        self.label_filtro_activo = QLabel()
+        self.label_filtro_activo.setStyleSheet(
+            "color: #2196F3; font-weight: bold; padding: 10px;"
+        )
+        self.label_filtro_activo.setVisible(False)
+        self.perfil_layout.addWidget(self.label_filtro_activo)
+
+        self.btn_quitar_filtro = QPushButton("Quitar Filtro")
+        self.btn_quitar_filtro.setVisible(False)
+        self.btn_quitar_filtro.clicked.connect(self._quitar_filtro)
+        self.perfil_layout.addWidget(self.btn_quitar_filtro)
+
+        self._conectar_widgets_categorias()
+
+    def _conectar_widgets_categorias(self):
+        if hasattr(self, "btn_crear_categoria"):
+            self.btn_crear_categoria.clicked.connect(self._crear_categoria)
+            self.btn_preview.clicked.connect(self._preview_categoria)
+
+    def _editar_categoria(self):
+        current_item = self.lista_categorias.currentItem()
+        if not current_item:
+            QMessageBox.warning(
+                self, "Advertencia", "Seleccione una categoría para editar"
+            )
+            return
+
+        datos = current_item.text().split("|")
+        if len(datos) >= 4:
+            nombre, patron, tipo, cat_id = datos[0], datos[1], datos[2], datos[3]
+            self.input_nombre_categoria.setText(nombre)
+            self.input_patron.setText(patron)
+            if tipo == "any":
+                self.radio_cualquiera.setChecked(True)
+            else:
+                self.radio_todas.setChecked(True)
+
+            self.controller.eliminar_categoria(int(cat_id))
+
+    def _eliminar_categoria(self):
+        current_item = self.lista_categorias.currentItem()
+        if not current_item:
+            QMessageBox.warning(
+                self, "Advertencia", "Seleccione una categoría para eliminar"
+            )
+            return
+
+        datos = current_item.text().split("|")
+        if len(datos) >= 4:
+            respuesta = QMessageBox.question(
+                self,
+                "Confirmar",
+                "¿Está seguro de eliminar esta categoría?",
+                QMessageBox.Yes | QMessageBox.No,
+            )
+            if respuesta == QMessageBox.Yes:
+                self.controller.eliminar_categoria(int(datos[3]))
 
     def _conectar_navegacion(self):
         self.panel_nombre.clicked.connect(lambda: self._cambiar_pagina(0))
@@ -188,31 +426,36 @@ class Principal(QMainWindow, Ui_MainWindow):
         self.Noticias_icono.clicked.connect(lambda: self._cambiar_pagina(3))
         self.ajustes_nombre.clicked.connect(lambda: self._cambiar_pagina(4))
         self.Ajustes_icono.clicked.connect(lambda: self._cambiar_pagina(4))
-        self.cerrar_sesion.clicked.connect(self.cerrar_sesion_accion)
-        self.cerrar_sesion_Icono.clicked.connect(self.cerrar_sesion_accion)
 
     def _conectar_widgets(self):
         self.buscador_input.textChanged.connect(self.controller.buscar_tesis)
         self.btn_importar.clicked.connect(self._importar_tesis)
         self.btn_test.clicked.connect(self._probar_conexion)
         self.btn_guardar.clicked.connect(self._guardar_config)
+        if hasattr(self, "btn_crear_categoria"):
+            self.btn_crear_categoria.clicked.connect(self._crear_categoria)
+            self.btn_preview.clicked.connect(self._preview_categoria)
+            self.btn_quitar_filtro.clicked.connect(self._quitar_filtro)
 
     def _conectar_signals(self):
         self.controller.tesis_changed.connect(self._actualizar_tabla_tesis)
         self.controller.error_occurred.connect(self._mostrar_error)
         self.controller.import_success.connect(self._mostrar_exito)
         self.controller.import_error.connect(self._mostrar_error)
+        if hasattr(self, "lista_categorias"):
+            self.controller.categorias_changed.connect(
+                self._actualizar_lista_categorias
+            )
+            self.controller.filtro_aplicado.connect(self._mostrar_filtro_activo)
 
     def _cambiar_pagina(self, index: int):
         self.MultiVentanas_Widget.setCurrentIndex(index)
         if index == 2:
             self._actualizar_analisis()
+        elif index == 1:
+            self._actualizar_lista_categorias(self.controller._categorias_cache)
 
-    def _actualizar_perfil(self):
-        self.valor_nombre.setText(f"Nombre: {self.usuario.get('nombre', 'N/A')}")
-        self.valor_usuario.setText(f"Usuario: {self.usuario.get('username', 'N/A')}")
-        self.valor_email.setText(f"Email: {self.usuario.get('email', 'N/A')}")
-
+    def _actualizar_estadisticas(self):
         stats = self.controller.obtener_estadisticas()
         self.valor_tesis.setText(f"Tesis creadas: {stats.get('total_tesis', 0)}")
         self.valor_capitulos.setText(f"Capitulos: {stats.get('total_capitulos', 0)}")
@@ -235,7 +478,86 @@ class Principal(QMainWindow, Ui_MainWindow):
             )
             self.tabla_tesis.setItem(i, 4, QTableWidgetItem(t["estado"]))
 
-        self._actualizar_perfil()
+        self._actualizar_estadisticas()
+
+    def _actualizar_lista_categorias(self, categorias):
+        if not hasattr(self, "lista_categorias"):
+            return
+        self.lista_categorias.clear()
+        for cat in categorias:
+            item_text = f"{cat['nombre']}|{cat['patron_busqueda']}|{cat['tipo_busqueda']}|{cat['id_categoria']}"
+            self.lista_categorias.addItem(item_text)
+
+    def _mostrar_filtro_activo(self, nombre: str, cantidad: int):
+        if not hasattr(self, "label_filtro_activo"):
+            return
+        self._filtro_activo = nombre
+        if nombre:
+            self.label_filtro_activo.setText(
+                f"Filtrado por: {nombre} ({cantidad} resultados)"
+            )
+            self.btn_quitar_filtro.setVisible(True)
+        else:
+            self.label_filtro_activo.setText("")
+            self.btn_quitar_filtro.setVisible(False)
+
+    def _quitar_filtro(self):
+        if not hasattr(self, "label_filtro_activo"):
+            return
+        self._filtro_activo = None
+        self.buscador_input.clear()
+        self.controller.buscar_tesis("")
+        self._mostrar_filtro_activo("", 0)
+
+    def _crear_categoria(self):
+        if not hasattr(self, "input_nombre_categoria"):
+            return
+        nombre = self.input_nombre_categoria.text().strip()
+        patron = self.input_patron.text().strip()
+        tipo = "any" if self.radio_cualquiera.isChecked() else "all"
+
+        if not nombre or not patron:
+            QMessageBox.warning(self, "Advertencia", "Complete todos los campos")
+            return
+
+        self.controller.crear_categoria(nombre, patron, tipo)
+        self.input_nombre_categoria.clear()
+        self.input_patron.clear()
+        self.radio_cualquiera.setChecked(True)
+        QMessageBox.information(self, "Exito", "Categoria creada correctamente")
+
+    def _preview_categoria(self):
+        if not hasattr(self, "input_patron"):
+            return
+        patron = self.input_patron.text().strip()
+        tipo = "any" if self.radio_cualquiera.isChecked() else "all"
+
+        if not patron:
+            QMessageBox.warning(self, "Advertencia", "Ingrese un patron de busqueda")
+            return
+
+        cantidad = self.controller.preview_filtro(patron, tipo)
+        QMessageBox.information(
+            self, "Vista Previa", f"Se encontraron {cantidad} tesis con ese filtro"
+        )
+
+    def _aplicar_categoria(self):
+        if not hasattr(self, "lista_categorias"):
+            return
+        current_item = self.lista_categorias.currentItem()
+        if not current_item:
+            return
+
+        datos = current_item.text().split("|")
+        if len(datos) >= 4:
+            categoria = {
+                "nombre": datos[0],
+                "patron_busqueda": datos[1],
+                "tipo_busqueda": datos[2],
+                "id_categoria": int(datos[3]),
+            }
+            self.controller.aplicar_filtro_categoria(categoria)
+            self.buscador_input.setText(categoria["patron_busqueda"])
 
     def _actualizar_analisis(self):
         stats = self.controller.obtener_estadisticas()

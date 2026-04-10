@@ -1,43 +1,29 @@
-import mysql.connector
-from mysql.connector import Error
+import sqlite3
 import hashlib
 import os
 
 
 class Database:
-    def __init__(
-        self,
-        host="localhost",
-        user="root",
-        password="admin123",
-        database="gestion_tesis",
-    ):
-        self.host = host
-        self.user = user
-        self.password = password
+    def __init__(self, database="tesis.db"):
         self.database = database
         self.connection = None
 
     def connect(self):
         try:
-            self.connection = mysql.connector.connect(
-                host=self.host,
-                user=self.user,
-                password=self.password,
-                database=self.database,
-            )
+            db_path = os.path.abspath(self.database)
+            self.connection = sqlite3.connect(db_path)
             return True
-        except (Error, RuntimeError, Exception) as e:
+        except Exception as e:
             print(f"Error de conexión: {e}")
             self.connection = None
             return False
 
     def disconnect(self):
-        if self.connection and self.connection.is_connected():
+        if self.connection:
             self.connection.close()
 
     def execute(self, query, params=None):
-        cursor = self.connection.cursor(dictionary=True)
+        cursor = self.connection.cursor()
         try:
             if params:
                 cursor.execute(query, params)
@@ -45,7 +31,7 @@ class Database:
                 cursor.execute(query)
             self.connection.commit()
             return cursor
-        except Error as e:
+        except Exception as e:
             print(f"Error en consulta: {e}")
             self.connection.rollback()
             return None
@@ -55,14 +41,22 @@ class Database:
     def fetch_all(self, query, params=None):
         if self.connection is None:
             return None
-        cursor = self.connection.cursor(dictionary=True)
+        cursor = self.connection.cursor()
         try:
             if params:
                 cursor.execute(query, params)
             else:
                 cursor.execute(query)
-            return cursor.fetchall()
-        except Error as e:
+            rows = cursor.fetchall()
+            columns = (
+                [description[0] for description in cursor.description]
+                if cursor.description
+                else []
+            )
+            if columns:
+                return [dict(zip(columns, row)) for row in rows]
+            return rows
+        except Exception as e:
             print(f"Error en consulta: {e}")
             return None
         finally:
@@ -71,14 +65,18 @@ class Database:
     def fetch_one(self, query, params=None):
         if self.connection is None:
             return None
-        cursor = self.connection.cursor(dictionary=True)
+        cursor = self.connection.cursor()
         try:
             if params:
                 cursor.execute(query, params)
             else:
                 cursor.execute(query)
-            return cursor.fetchone()
-        except Error as e:
+            row = cursor.fetchone()
+            if row:
+                columns = [description[0] for description in cursor.description]
+                return dict(zip(columns, row))
+            return None
+        except Exception as e:
             print(f"Error en consulta: {e}")
             return None
         finally:

@@ -176,8 +176,9 @@ class TestPrincipal:
 
         principal.MultiVentanas_Widget.setCurrentIndex(1)
 
-        texto_nombre = principal.valor_nombre.text()
-        assert "Administrador" in texto_nombre or "Nombre:" in texto_nombre
+        assert hasattr(principal, "input_nombre_categoria")
+        assert hasattr(principal, "input_patron")
+        assert hasattr(principal, "lista_categorias")
 
         principal.close()
 

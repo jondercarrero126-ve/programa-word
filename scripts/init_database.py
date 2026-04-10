@@ -76,6 +76,19 @@ def crear_base_datos():
             )
         """)
 
+        print("Creando tabla 'categorias'...")
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS categorias (
+                id_categoria INT PRIMARY KEY AUTO_INCREMENT,
+                nombre VARCHAR(100) NOT NULL,
+                patron_busqueda TEXT NOT NULL,
+                tipo_busqueda ENUM('any', 'all') DEFAULT 'any',
+                id_usuario INT,
+                fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE SET NULL
+            )
+        """)
+
         password_hash = hashlib.sha256("admin123".encode()).hexdigest()
         cursor.execute(
             """
