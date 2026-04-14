@@ -60,7 +60,7 @@ class TesisController(QObject):
         if self.db.connect():
             try:
                 categorias = self.db.fetch_all(
-                    "SELECT * FROM categorias WHERE id_usuario = %s ORDER BY fecha_creacion DESC",
+                    "SELECT * FROM categorias WHERE id_usuario = ? ORDER BY fecha_creacion DESC",
                     (self.usuario["id_usuario"],),
                 )
                 self._categorias_cache = categorias if categorias else []
@@ -77,7 +77,7 @@ class TesisController(QObject):
             try:
                 self.db.execute(
                     """INSERT INTO categorias (nombre, patron_busqueda, tipo_busqueda, id_usuario)
-                       VALUES (%s, %s, %s, %s)""",
+                       VALUES (?, ?, ?, ?)""",
                     (nombre, patron, tipo, self.usuario["id_usuario"]),
                 )
                 self.db.disconnect()
@@ -92,7 +92,7 @@ class TesisController(QObject):
         if self.db.connect():
             try:
                 self.db.execute(
-                    "DELETE FROM categorias WHERE id_categoria = %s", (id_categoria,)
+                    "DELETE FROM categorias WHERE id_categoria = ?", (id_categoria,)
                 )
                 self.db.disconnect()
                 self.cargar_categorias()
@@ -108,8 +108,8 @@ class TesisController(QObject):
         if self.db.connect():
             try:
                 self.db.execute(
-                    """UPDATE categorias SET nombre = %s, patron_busqueda = %s, tipo_busqueda = %s
-                       WHERE id_categoria = %s""",
+                    """UPDATE categorias SET nombre = ?, patron_busqueda = ?, tipo_busqueda = ?
+                       WHERE id_categoria = ?""",
                     (nombre, patron, tipo, id_categoria),
                 )
                 self.db.disconnect()
@@ -208,7 +208,7 @@ class TesisController(QObject):
             try:
                 query = """
                     INSERT INTO tesis (titulo, autor_principal, resumen, palabras_clave, anio, id_usuario, estado)
-                    VALUES (%s, %s, %s, %s, %s, %s, 'borrador')
+                    VALUES (?, ?, ?, ?, ?, ?, 'borrador')
                 """
                 cursor = self.db.execute(
                     query,
@@ -228,14 +228,14 @@ class TesisController(QObject):
                     for i, cap in enumerate(datos["capitulos"], 1):
                         self.db.execute(
                             """INSERT INTO capitulos (id_tesis, numero_capitulo, titulo, contenido, orden)
-                               VALUES (%s, %s, %s, %s, %s)""",
+                               VALUES (?, ?, ?, ?, ?)""",
                             (tesis_id, i, cap["titulo"], cap["contenido"][:5000], i),
                         )
 
                     for ref in datos["referencias"]:
                         self.db.execute(
                             """INSERT INTO referencias (id_tesis, tipo, autor, titulo, anio, url)
-                               VALUES (%s, %s, %s, %s, %s, %s)""",
+                               VALUES (?, ?, ?, ?, ?, ?)""",
                             (
                                 tesis_id,
                                 ref["tipo"],
@@ -266,7 +266,7 @@ class TesisController(QObject):
                 result = self.db.fetch_one("SELECT COUNT(*) as total FROM referencias")
                 stats["total_referencias"] = result["total"] if result else 0
                 tesis = self.db.fetch_all(
-                    "SELECT YEAR(fecha_creacion) as anio, COUNT(*) as cantidad FROM tesis GROUP BY YEAR(fecha_creacion)"
+                    "SELECT strftime('%Y', fecha_creacion) as anio, COUNT(*) as cantidad FROM tesis GROUP BY strftime('%Y', fecha_creacion)"
                 )
                 stats["tesis_por_anio"] = tesis if tesis else []
                 self.db.disconnect()
@@ -311,11 +311,17 @@ class Principal(QMainWindow, Ui_MainWindow):
     def _crear_widgets_busquedas(self):
         self.input_nombre_categoria = QLineEdit()
         self.input_nombre_categoria.setPlaceholderText("Nombre de la categoría")
+        self.input_nombre_categoria.setStyleSheet(
+            "padding: 8px; border-radius: 5px; border: 1px solid #ccc; font-size: 13px;"
+        )
         self.perfil_layout.addWidget(self.input_nombre_categoria)
 
         self.input_patron = QLineEdit()
         self.input_patron.setPlaceholderText(
             "Palabras a buscar (separadas por espacio)"
+        )
+        self.input_patron.setStyleSheet(
+            "padding: 8px; border-radius: 5px; border: 1px solid #ccc; font-size: 13px;"
         )
         self.perfil_layout.addWidget(self.input_patron)
 
@@ -331,7 +337,13 @@ class Principal(QMainWindow, Ui_MainWindow):
 
         botones_layout = QHBoxLayout()
         self.btn_crear_categoria = QPushButton("Crear Categoría")
+        self.btn_crear_categoria.setStyleSheet(
+            "background-color: #4CAF50; color: white; padding: 8px 16px; border: none; border-radius: 5px; font-weight: bold;"
+        )
         self.btn_preview = QPushButton("Vista Previa")
+        self.btn_preview.setStyleSheet(
+            "background-color: #FF9800; color: white; padding: 8px 16px; border: none; border-radius: 5px; font-weight: bold;"
+        )
         botones_layout.addWidget(self.btn_crear_categoria)
         botones_layout.addWidget(self.btn_preview)
 
@@ -340,14 +352,26 @@ class Principal(QMainWindow, Ui_MainWindow):
         self.perfil_layout.addWidget(botones_widget)
 
         self.lista_categorias = QListWidget()
+        self.lista_categorias.setStyleSheet(
+            "border: 1px solid #ccc; border-radius: 5px; padding: 5px;"
+        )
         self.perfil_layout.addWidget(self.lista_categorias)
 
         acciones_layout = QHBoxLayout()
         btn_aplicar = QPushButton("Aplicar")
+        btn_aplicar.setStyleSheet(
+            "background-color: #2196F3; color: white; padding: 6px 12px; border: none; border-radius: 4px;"
+        )
         btn_aplicar.clicked.connect(self._aplicar_categoria)
         btn_editar = QPushButton("Editar")
+        btn_editar.setStyleSheet(
+            "background-color: #FF9800; color: white; padding: 6px 12px; border: none; border-radius: 4px;"
+        )
         btn_editar.clicked.connect(self._editar_categoria)
         btn_eliminar = QPushButton("Eliminar")
+        btn_eliminar.setStyleSheet(
+            "background-color: #F44336; color: white; padding: 6px 12px; border: none; border-radius: 4px;"
+        )
         btn_eliminar.clicked.connect(self._eliminar_categoria)
         acciones_layout.addWidget(btn_aplicar)
         acciones_layout.addWidget(btn_editar)
@@ -429,6 +453,12 @@ class Principal(QMainWindow, Ui_MainWindow):
 
     def _conectar_widgets(self):
         self.buscador_input.textChanged.connect(self.controller.buscar_tesis)
+        self.buscador_input.setStyleSheet(
+            "padding: 8px; border-radius: 5px; border: 1px solid #ccc; font-size: 14px;"
+        )
+        self.btn_importar.setStyleSheet(
+            "background-color: #2196F3; color: white; padding: 8px 16px; border: none; border-radius: 5px; font-weight: bold;"
+        )
         self.btn_importar.clicked.connect(self._importar_tesis)
         self.btn_test.clicked.connect(self._probar_conexion)
         self.btn_guardar.clicked.connect(self._guardar_config)

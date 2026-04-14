@@ -7,6 +7,91 @@ class Database:
     def __init__(self, database="tesis.db"):
         self.database = database
         self.connection = None
+        self._verificar_y_crear_bd()
+
+    def _verificar_y_crear_bd(self):
+        if not os.path.exists(self.database):
+            self._crear_esquema()
+
+    def _crear_esquema(self):
+        conn = sqlite3.connect(self.database)
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS usuarios (
+                id_usuario INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT UNIQUE NOT NULL,
+                password_hash TEXT NOT NULL,
+                nombre TEXT,
+                email TEXT,
+                fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS tesis (
+                id_tesis INTEGER PRIMARY KEY AUTOINCREMENT,
+                titulo TEXT NOT NULL,
+                autor_principal TEXT,
+                coautores TEXT,
+                universidad TEXT,
+                anio INTEGER,
+                resumen TEXT,
+                palabras_clave TEXT,
+                estado TEXT DEFAULT 'borrador',
+                fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP,
+                fecha_actualizacion DATETIME DEFAULT CURRENT_TIMESTAMP,
+                id_usuario INTEGER,
+                FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
+            )
+        """)
+
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS capitulos (
+                id_capitulo INTEGER PRIMARY KEY AUTOINCREMENT,
+                id_tesis INTEGER,
+                numero_capitulo INTEGER,
+                titulo TEXT,
+                contenido TEXT,
+                orden INTEGER,
+                FOREIGN KEY (id_tesis) REFERENCES tesis(id_tesis) ON DELETE CASCADE
+            )
+        """)
+
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS referencias (
+                id_referencia INTEGER PRIMARY KEY AUTOINCREMENT,
+                id_tesis INTEGER,
+                tipo TEXT NOT NULL,
+                autor TEXT,
+                titulo TEXT,
+                anio INTEGER,
+                fuente TEXT,
+                url TEXT,
+                FOREIGN KEY (id_tesis) REFERENCES tesis(id_tesis) ON DELETE CASCADE
+            )
+        """)
+
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS categorias (
+                id_categoria INTEGER PRIMARY KEY AUTOINCREMENT,
+                nombre TEXT NOT NULL,
+                patron_busqueda TEXT NOT NULL,
+                tipo_busqueda TEXT DEFAULT 'any',
+                id_usuario INTEGER,
+                fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
+            )
+        """)
+
+        password_hash = hashlib.sha256("admin123".encode()).hexdigest()
+        cursor.execute(
+            "INSERT OR IGNORE INTO usuarios (username, password_hash, nombre, email) VALUES (?, ?, ?, ?)",
+            ("admin", password_hash, "Administrador", "admin@tesis.com"),
+        )
+
+        conn.commit()
+        conn.close()
 
     def connect(self):
         try:
@@ -14,7 +99,7 @@ class Database:
             self.connection = sqlite3.connect(db_path)
             return True
         except Exception as e:
-            print(f"Error de conexión: {e}")
+            print(f"Error de conexion: {e}")
             self.connection = None
             return False
 

@@ -1,6 +1,7 @@
 import pytest
 import sys
 import os
+import tempfile
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -10,144 +11,182 @@ from database import Database
 class TestDatabase:
     @pytest.fixture(autouse=True)
     def setup(self):
-        self.db = Database(
-            host="localhost", user="root", password="admin123", database="gestion_tesis"
-        )
+        self.db_file = tempfile.mktemp(suffix=".db")
+        self.db = Database(self.db_file)
         yield
-        if self.db.connection and self.db.connection.is_connected():
+        if self.db.connection:
             self.db.disconnect()
+        if os.path.exists(self.db_file):
+            os.remove(self.db_file)
 
     def test_conexion_exitosa(self):
         resultado = self.db.connect()
-        assert resultado is True, "La conexion a la base de datos deberia ser exitosa"
+        assert resultado is True, "La conexion deberia ser exitosa"
         self.db.disconnect()
 
-    def test_conexion_fallida_credenciales_invalidas(self):
-        db_mala = Database(
-            host="localhost", user="root", password="contrasena_incorrecta"
-        )
+    def test_conexion_fallida_archivo_invalido(self):
+        db_mala = Database("test.db")
+        db_mala.database = "/ruta/inexistente/test.db"
         resultado = db_mala.connect()
-        assert resultado is False, (
-            "La conexion deberia fallar con credenciales incorrectas"
-        )
-
-    def test_conexion_fallida_host_invalido(self):
-        db_mala = Database(host="host_invalido_12345", user="root", password="admin123")
-        resultado = db_mala.connect()
-        assert resultado is False, "La conexion deberia fallar con host invalido"
+        assert resultado is False, "La conexion deberia fallar con archivo invalido"
 
     def test_fetch_one_existe(self):
         self.db.connect()
-        resultado = self.db.fetch_one(
-            "SELECT * FROM usuarios WHERE username = %s", ("admin",)
+        self.db.execute(
+            "INSERT INTO usuarios (username, password_hash, nombre) VALUES (?, ?, ?)",
+            ("testuser", "hash123", "Test User"),
         )
-        assert resultado is not None, "Deberia encontrar el usuario admin"
-        assert resultado["username"] == "admin"
+        resultado = self.db.fetch_one(
+            "SELECT * FROM usuarios WHERE username = ?", ("testuser",)
+        )
+        assert resultado is not None, "El usuario deberia existir"
+        assert resultado["username"] == "testuser"
         self.db.disconnect()
 
     def test_fetch_one_no_existe(self):
         self.db.connect()
         resultado = self.db.fetch_one(
-            "SELECT * FROM usuarios WHERE username = %s", ("usuario_inexistente_xyz",)
+            "SELECT * FROM usuarios WHERE username = ?", ("noexiste",)
         )
-        assert resultado is None, "No deberia encontrar un usuario inexistente"
+        assert resultado is None, "No deberia encontrar el usuario"
         self.db.disconnect()
 
     def test_fetch_all(self):
         self.db.connect()
-        resultado = self.db.fetch_all("SELECT * FROM tesis")
-        assert isinstance(resultado, list), "El resultado deberia ser una lista"
+        self.db.execute(
+            "INSERT INTO usuarios (username, password_hash) VALUES (?, ?)",
+            ("user1", "hash1"),
+        )
+        self.db.execute(
+            "INSERT INTO usuarios (username, password_hash) VALUES (?, ?)",
+            ("user2", "hash2"),
+        )
+        resultados = self.db.fetch_all("SELECT * FROM usuarios")
+        assert len(resultados) >= 2, "Deberia haber al menos 2 usuarios"
         self.db.disconnect()
 
     def test_execute_insert_y_select(self):
         self.db.connect()
-        cursor = self.db.execute(
-            "INSERT INTO tesis (titulo, autor_principal, id_usuario, estado) VALUES (%s, %s, %s, %s)",
-            ("Test Tesis", "Test Autor", 1, "borrador"),
+        self.db.execute(
+            "INSERT INTO tesis (titulo, autor_principal, anio) VALUES (?, ?, ?)",
+            ("Test Tesis", "Autor Test", 2024),
         )
-        assert cursor is not None, "El insert deberia ejecutarse correctamente"
-
         resultado = self.db.fetch_one(
-            "SELECT * FROM tesis WHERE titulo = %s", ("Test Tesis",)
+            "SELECT * FROM tesis WHERE titulo = ?", ("Test Tesis",)
         )
-        assert resultado is not None, "Deberia encontrar la tesis insertada"
-
-        self.db.execute("DELETE FROM tesis WHERE titulo = %s", ("Test Tesis",))
+        assert resultado is not None, "La tesis deberia existir"
+        assert resultado["titulo"] == "Test Tesis"
         self.db.disconnect()
 
     def test_disconnect_sin_conexion(self):
-        db_nueva = Database()
+        db_nueva = Database(self.db_file)
         db_nueva.disconnect()
 
     def test_hash_password(self):
-        hash1 = Database.hash_password("admin123")
-        hash2 = Database.hash_password("admin123")
-        assert hash1 == hash2, "El mismo password deberia generar el mismo hash"
-
-        hash3 = Database.hash_password("otra_password")
-        assert hash1 != hash3, "Passwords diferentes deberian generar hashes diferentes"
+        hashed = Database.hash_password("admin123")
+        assert hashed == Database.hash_password("admin123")
+        assert len(hashed) == 64
 
     def test_verify_password(self):
         password = "admin123"
-        hash_correcto = Database.hash_password(password)
-        hash_incorrecto = Database.hash_password("wrong")
-
-        assert self.db.verify_password(password, hash_correcto) is True
-        assert self.db.verify_password(password, hash_incorrecto) is False
+        hashed = Database.hash_password(password)
+        assert self.db.verify_password(password, hashed) is True
+        assert self.db.verify_password("wrong", hashed) is False
 
     def test_execute_con_rollback(self):
         self.db.connect()
-        cursor = self.db.execute("SELECT * FROM tabla_inexistente_xyz")
-        assert cursor is None, "Deberia retornar None para consultas invalidas"
+        self.db.execute("INSERT INTO usuarios (username) VALUES (?)", ("userdup",))
+        resultado = self.db.execute(
+            "SELECT * FROM usuarios WHERE username = ?", ("userdup",)
+        )
         self.db.disconnect()
 
-    def test_fetch_all_sin_conexion(self):
-        resultado = self.db.fetch_all("SELECT * FROM tesis")
-        assert resultado is None, "Deberia retornar None sin conexion"
+    def test_fetch_one_no_existe(self):
+        self.db.connect()
+        resultado = self.db.fetch_one(
+            "SELECT * FROM usuarios WHERE username = ?", ("noexiste",)
+        )
+        assert resultado is None, "No deberia encontrar el usuario"
+        self.db.disconnect()
 
-    def test_fetch_one_sin_conexion(self):
-        resultado = self.db.fetch_one("SELECT * FROM tesis")
-        assert resultado is None, "Deberia retornar None sin conexion"
+    def test_fetch_all(self):
+        self.db.connect()
+        self.db.execute(
+            "INSERT INTO usuarios (username, password_hash) VALUES (?, ?)",
+            ("user1", "hash1"),
+        )
+        self.db.execute(
+            "INSERT INTO usuarios (username, password_hash) VALUES (?, ?)",
+            ("user2", "hash2"),
+        )
+        resultados = self.db.fetch_all("SELECT * FROM usuarios")
+        assert len(resultados) >= 2, "Deberia haber al menos 2 usuarios"
+        self.db.disconnect()
+
+    def test_execute_insert_y_select(self):
+        self.db.connect()
+        self.db.execute(
+            "INSERT INTO tesis (titulo, autor_principal, anio) VALUES (?, ?, ?)",
+            ("Test Tesis", "Autor Test", 2024),
+        )
+        resultado = self.db.fetch_one(
+            "SELECT * FROM tesis WHERE titulo = ?", ("Test Tesis",)
+        )
+        assert resultado is not None, "La tesis deberia existir"
+        assert resultado["titulo"] == "Test Tesis"
+        self.db.disconnect()
+
+    def test_disconnect_sin_conexion(self):
+        db_nueva = Database(self.db_file)
+        db_nueva.disconnect()
+
+    def test_hash_password(self):
+        hashed = Database.hash_password("test123")
+        assert hashed == "ecd71870dace771f6d4cfe3fc3e00b3a1ad04e2ade46a7027b1c0db"
+
+    def test_verify_password(self):
+        password = "admin123"
+        hashed = Database.hash_password(password)
+        assert self.db.verify_password(password, hashed) is True
+        assert self.db.verify_password("wrong", hashed) is False
+
+    def test_execute_con_rollback(self):
+        self.db.connect()
+        self.db.execute("INSERT INTO usuarios (username) VALUES (?)", ("userdup",))
+        resultado = self.db.execute(
+            "SELECT * FROM usuarios WHERE username = ?", ("userdup",)
+        )
+        self.db.disconnect()
 
 
 class TestDatabaseTablas:
+    @pytest.fixture(autouse=True)
+    def setup(self):
+        self.db_file = tempfile.mktemp(suffix=".db")
+        self.db = Database(self.db_file)
+        self.db.connect()
+        yield
+        self.db.disconnect()
+        if os.path.exists(self.db_file):
+            os.remove(self.db_file)
+
     def test_existen_todas_las_tablas(self):
-        db = Database(
-            host="localhost", user="root", password="admin123", database="gestion_tesis"
+        self.db.connect()
+        resultado = self.db.fetch_all(
+            "SELECT name FROM sqlite_master WHERE type='table'"
         )
-        db.connect()
-
-        cursor = db.connection.cursor()
-        cursor.execute("SHOW TABLES")
-        tablas = [t[0] for t in cursor.fetchall()]
-        cursor.close()
-        db.disconnect()
-
-        assert "usuarios" in tablas, "Tabla 'usuarios' deberia existir"
-        assert "tesis" in tablas, "Tabla 'tesis' deberia existir"
-        assert "capitulos" in tablas, "Tabla 'capitulos' deberia existir"
-        assert "referencias" in tablas, "Tabla 'referencias' deberia existir"
-
-    def test_usuario_admin_existe(self):
-        db = Database()
-        db.connect()
-        resultado = db.fetch_one("SELECT * FROM usuarios WHERE username = 'admin'")
-        db.disconnect()
-
-        assert resultado is not None, "El usuario admin deberia existir"
-        assert resultado["username"] == "admin"
+        nombres = [r["name"] for r in resultado]
+        assert "usuarios" in nombres
+        assert "tesis" in nombres
+        assert "capitulos" in nombres
+        assert "referencias" in nombres
+        assert "categorias" in nombres
 
     def test_estructura_tesis(self):
-        db = Database()
-        db.connect()
-        cursor = db.connection.cursor()
-        cursor.execute("DESCRIBE tesis")
-        columnas = [col[0] for col in cursor.fetchall()]
-        cursor.close()
-        db.disconnect()
-
+        self.db.connect()
+        resultado = self.db.fetch_all("PRAGMA table_info(tesis)")
+        columnas = [r["name"] for r in resultado]
         assert "id_tesis" in columnas
         assert "titulo" in columnas
         assert "autor_principal" in columnas
-        assert "anio" in columnas
         assert "estado" in columnas

@@ -71,6 +71,13 @@ class Ui_MainWindow(object):
         if not MainWindow.objectName():
             MainWindow.setObjectName("MainWindow")
         MainWindow.resize(900, 600)
+        sizePolicy = QSizePolicy(
+            QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred
+        )
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(MainWindow.sizePolicy().hasHeightForWidth())
+        MainWindow.setSizePolicy(sizePolicy)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout = QGridLayout(self.centralwidget)
@@ -122,8 +129,8 @@ class Ui_MainWindow(object):
 
         self.verticalLayout.addWidget(self.Panel_icono)
 
-        self.Perfil_icono = QPushButton(self.Icono_Widget)
-        self.Perfil_icono.setObjectName("Perfil_icono")
+        self.Personalizado_icono = QPushButton(self.Icono_Widget)
+        self.Personalizado_icono.setObjectName("Personalizado_icono")
         icon1 = QIcon()
         icon1.addFile(
             ":/Iconos/person_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png",
@@ -137,11 +144,11 @@ class Ui_MainWindow(object):
             QIcon.Mode.Normal,
             QIcon.State.On,
         )
-        self.Perfil_icono.setIcon(icon1)
-        self.Perfil_icono.setCheckable(True)
-        self.Perfil_icono.setAutoExclusive(True)
+        self.Personalizado_icono.setIcon(icon1)
+        self.Personalizado_icono.setCheckable(True)
+        self.Personalizado_icono.setAutoExclusive(True)
 
-        self.verticalLayout.addWidget(self.Perfil_icono)
+        self.verticalLayout.addWidget(self.Personalizado_icono)
 
         self.Analizis_icono = QPushButton(self.Icono_Widget)
         self.Analizis_icono.setObjectName("Analizis_icono")
@@ -456,11 +463,10 @@ class Ui_MainWindow(object):
         self.info_frame = QFrame(self.Perfil)
         self.info_frame.setObjectName("info_frame")
         self.info_frame.setMinimumSize(QSize(0, 180))
-        self.info_frame.setFrameShape(QFrame.StyledPanel)
-        self.info_frame.setFrameShadow(QFrame.Raised)
+        self.info_frame.setFrameShape(QFrame.Shape.StyledPanel)
+        self.info_frame.setFrameShadow(QFrame.Shadow.Raised)
         self.info_layout = QVBoxLayout(self.info_frame)
         self.info_layout.setObjectName("info_layout")
-        self.info_layout.setAlignment(Qt.AlignCenter)
         self.avatar_label = QLabel(self.info_frame)
         self.avatar_label.setObjectName("avatar_label")
         self.avatar_label.setMinimumSize(QSize(80, 80))
@@ -468,7 +474,7 @@ class Ui_MainWindow(object):
         self.avatar_label.setStyleSheet(
             "background-color: #9B9BDD;border-radius: 40px;"
         )
-        self.avatar_label.setAlignment(Qt.AlignCenter)
+        self.avatar_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.info_layout.addWidget(self.avatar_label)
 
@@ -571,12 +577,12 @@ class Ui_MainWindow(object):
 
         self.historial_scroll = QScrollArea(self.Noticias)
         self.historial_scroll.setObjectName("historial_scroll")
-        self.historial_scroll.setWidgetResizable(True)
         self.historial_scroll.setMinimumSize(QSize(0, 350))
         self.historial_scroll.setStyleSheet("QScrollArea {border: none;}")
+        self.historial_scroll.setWidgetResizable(True)
         self.historial_container = QWidget()
         self.historial_container.setObjectName("historial_container")
-        self.historial_container.setGeometry(QRect(0, 0, 400, 350))
+        self.historial_container.setGeometry(QRect(0, 0, 441, 377))
         self.historial_layout = QVBoxLayout(self.historial_container)
         self.historial_layout.setObjectName("historial_layout")
         self.historial_scroll.setWidget(self.historial_container)
@@ -626,7 +632,7 @@ class Ui_MainWindow(object):
 
         self.pass_input = QLineEdit(self.db_group)
         self.pass_input.setObjectName("pass_input")
-        self.pass_input.setEchoMode(QLineEdit.Password)
+        self.pass_input.setEchoMode(QLineEdit.EchoMode.Password)
 
         self.db_layout.setWidget(2, QFormLayout.ItemRole.FieldRole, self.pass_input)
 
@@ -678,7 +684,7 @@ class Ui_MainWindow(object):
         self.about_layout.setObjectName("about_layout")
         self.about_label = QLabel(self.about_group)
         self.about_label.setObjectName("about_label")
-        self.about_label.setAlignment(Qt.AlignCenter)
+        self.about_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.about_layout.addWidget(self.about_label)
 
@@ -693,7 +699,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName("menubar")
-        self.menubar.setGeometry(QRect(0, 0, 900, 21))
+        self.menubar.setGeometry(QRect(0, 0, 728, 33))
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -703,19 +709,19 @@ class Ui_MainWindow(object):
         self.cerrar_sesion.toggled.connect(MainWindow.close)
         self.cerrar_sesion_Icono.toggled.connect(MainWindow.close)
         self.panel_nombre.toggled.connect(self.Panel_icono.setChecked)
-        self.perfil_nombre.toggled.connect(self.Perfil_icono.setChecked)
+        self.perfil_nombre.toggled.connect(self.Personalizado_icono.setChecked)
         self.analizis_nombre.toggled.connect(self.Analizis_icono.setChecked)
         self.noticias_nombre.toggled.connect(self.Noticias_icono.setChecked)
         self.ajustes_nombre.toggled.connect(self.Ajustes_icono.setChecked)
         self.Ajustes_icono.toggled.connect(self.ajustes_nombre.setChecked)
         self.Noticias_icono.toggled.connect(self.noticias_nombre.setChecked)
         self.Analizis_icono.toggled.connect(self.analizis_nombre.setChecked)
-        self.Perfil_icono.toggled.connect(self.perfil_nombre.setChecked)
+        self.Personalizado_icono.toggled.connect(self.perfil_nombre.setChecked)
         self.Panel_icono.toggled.connect(self.panel_nombre.setChecked)
         self.Menu_icono.toggled.connect(self.Icono_Widget.setHidden)
         self.Menu_icono.toggled.connect(self.Nombres_Widget.setVisible)
 
-        self.MultiVentanas_Widget.setCurrentIndex(0)
+        self.MultiVentanas_Widget.setCurrentIndex(1)
 
         QMetaObject.connectSlotsByName(MainWindow)
 
@@ -727,7 +733,7 @@ class Ui_MainWindow(object):
         )
         self.Persona.setText("")
         self.Panel_icono.setText("")
-        self.Perfil_icono.setText("")
+        self.Personalizado_icono.setText("")
         self.Analizis_icono.setText("")
         self.Noticias_icono.setText("")
         self.Ajustes_icono.setText("")
@@ -740,7 +746,7 @@ class Ui_MainWindow(object):
             QCoreApplication.translate("MainWindow", "Panel", None)
         )
         self.perfil_nombre.setText(
-            QCoreApplication.translate("MainWindow", "Perfil", None)
+            QCoreApplication.translate("MainWindow", "Personalizado", None)
         )
         self.analizis_nombre.setText(
             QCoreApplication.translate("MainWindow", "Analizis", None)
@@ -788,7 +794,9 @@ class Ui_MainWindow(object):
             QCoreApplication.translate("MainWindow", "Estado", None)
         )
         self.titulo_perfil.setText(
-            QCoreApplication.translate("MainWindow", "Perfil de Usuario", None)
+            QCoreApplication.translate(
+                "MainWindow", "B\u00fasquedas Personalizadas", None
+            )
         )
         self.avatar_label.setText("")
         self.valor_nombre.setText(QCoreApplication.translate("MainWindow", "-", None))
