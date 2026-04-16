@@ -63,7 +63,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-from UI import recursos_rc
+import UI.recursos_rc
 
 
 class Ui_MainWindow(object):
@@ -448,6 +448,36 @@ class Ui_MainWindow(object):
 
         self.panel_layout.addWidget(self.tabla_tesis)
 
+        self.botones_tesis_layout = QHBoxLayout()
+        self.botones_tesis_layout.setObjectName("botones_tesis_layout")
+        self.horizontalSpacer_botones = QSpacerItem(
+            40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum
+        )
+
+        self.botones_tesis_layout.addItem(self.horizontalSpacer_botones)
+
+        self.btn_editar_tesis = QPushButton(self.Panel)
+        self.btn_editar_tesis.setObjectName("btn_editar_tesis")
+        self.btn_editar_tesis.setMinimumSize(QSize(120, 35))
+        self.btn_editar_tesis.setEnabled(False)
+        self.btn_editar_tesis.setStyleSheet(
+            "background-color: #FF9800; color: white; padding: 8px 16px; border: none; border-radius: 5px; font-weight: bold;"
+        )
+
+        self.botones_tesis_layout.addWidget(self.btn_editar_tesis)
+
+        self.btn_eliminar_tesis = QPushButton(self.Panel)
+        self.btn_eliminar_tesis.setObjectName("btn_eliminar_tesis")
+        self.btn_eliminar_tesis.setMinimumSize(QSize(120, 35))
+        self.btn_eliminar_tesis.setEnabled(False)
+        self.btn_eliminar_tesis.setStyleSheet(
+            "background-color: #F44336; color: white; padding: 8px 16px; border: none; border-radius: 5px; font-weight: bold;"
+        )
+
+        self.botones_tesis_layout.addWidget(self.btn_eliminar_tesis)
+
+        self.panel_layout.addLayout(self.botones_tesis_layout)
+
         self.MultiVentanas_Widget.addWidget(self.Panel)
         self.Perfil = QWidget()
         self.Perfil.setObjectName("Perfil")
@@ -792,6 +822,12 @@ class Ui_MainWindow(object):
         ___qtablewidgetitem4 = self.tabla_tesis.horizontalHeaderItem(4)
         ___qtablewidgetitem4.setText(
             QCoreApplication.translate("MainWindow", "Estado", None)
+        )
+        self.btn_editar_tesis.setText(
+            QCoreApplication.translate("MainWindow", "Editar", None)
+        )
+        self.btn_eliminar_tesis.setText(
+            QCoreApplication.translate("MainWindow", "Eliminar", None)
         )
         self.titulo_perfil.setText(
             QCoreApplication.translate(

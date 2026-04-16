@@ -174,5 +174,64 @@ class Database:
     def verify_password(self, password, stored_hash):
         return self.hash_password(password) == stored_hash
 
+    # Métodos de estadísticas para gráficos
+    def get_tesis_por_estado(self):
+        """Obtiene la cantidad de tesis agrupadas por estado.
+
+        Returns:
+            list: Lista de diccionarios con 'estado' y 'cantidad'
+        """
+        if self.connection is None:
+            return []
+        cursor = self.connection.cursor()
+        try:
+            cursor.execute("""
+                SELECT estado, COUNT(*) as cantidad 
+                FROM tesis 
+                GROUP BY estado
+                ORDER BY cantidad DESC
+            """)
+            rows = cursor.fetchall()
+            columns = [description[0] for description in cursor.description]
+            return [dict(zip(columns, row)) for row in rows]
+        except Exception as e:
+            print(f"Error en consulta: {e}")
+            return []
+        finally:
+            cursor.close()
+
+    def get_tesis_por_autor(self, limite=10):
+        """Obtiene los autores con más tesis.
+
+        Args:
+            limite: Número máximo de autores a devolver (default 10)
+
+        Returns:
+            list: Lista de diccionarios con 'autor_principal' y 'cantidad'
+        """
+        if self.connection is None:
+            return []
+        cursor = self.connection.cursor()
+        try:
+            cursor.execute(
+                """
+                SELECT autor_principal, COUNT(*) as cantidad 
+                FROM tesis 
+                WHERE autor_principal IS NOT NULL AND autor_principal != ''
+                GROUP BY autor_principal
+                ORDER BY cantidad DESC
+                LIMIT ?
+            """,
+                (limite,),
+            )
+            rows = cursor.fetchall()
+            columns = [description[0] for description in cursor.description]
+            return [dict(zip(columns, row)) for row in rows]
+        except Exception as e:
+            print(f"Error en consulta: {e}")
+            return []
+        finally:
+            cursor.close()
+
 
 db = Database()

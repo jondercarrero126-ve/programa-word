@@ -5,16 +5,18 @@
 | Campo | Valor |
 |-------|-------|
 | **Nombre del Proyecto** | Sistema de Gestión de Tesis |
-| **Versión** | 1.0 |
+| **Versión** | 1.1 |
 | **Fecha de Creación** | 09/04/2026 |
-| **Tecnología Principal** | Python + PySide6 + MariaDB |
+| **Última Actualización** | 16/04/2026 |
+| **Tecnología Principal** | Python + PySide6 + SQLite |
+| **Tipo de Usuario** | SINGLE-USER (único usuario, sin registro) |
 | **Estado** | Funcional - En pruebas |
 
 ---
 
 ## 2. Descripción del Producto
 
-Sistema de gestión de tesis que permite importar documentos Word, extraer automáticamente su contenido (título, autor, capítulos, referencias) y almacenarlos en una base de datos MariaDB para su organización y consulta.
+Sistema de gestión de tesis que permite importar documentos Word, extraer automáticamente su contenido (título, autor, capítulos, referencias) y almacenarlos en una base de datos SQLite para su organización y consulta. Aplicación para UNICO USUARIO.
 
 ---
 
@@ -45,17 +47,19 @@ Sistema de gestión de tesis que permite importar documentos Word, extraer autom
 | 10 | Historial de actividad | Baja | Implementado |
 | 11 | Configuración de conexión a BD | Alta | Implementado |
 
-### 4.2 Funcionalidades Pendientes
+### 4.2 Funcionalidades Pendientes (Actualizado 16/04/2026)
 
-| # | Funcionalidad | Prioridad |
-|---|---------------|-----------|
-| 1 | Editar tesis importada | Alta |
-| 2 | Eliminar tesis | Alta |
-| 3 | Exportar tesis a Word/PDF | Media |
-| 4 | Gráficos de análisis (reales, no placeholder) | Media |
-| 5 | Registrar nuevos usuarios | Media |
-| 6 | Cambiar contraseña | Media |
-| 7 | Tema oscuro/claro | Baja |
+| # | Funcionalidad | Prioridad | Fase |
+|---|---------------|-----------|------|
+| 1 | Editar tesis importada | Alta | 1 |
+| 2 | Eliminar tesis | Alta | 1 |
+| 3 | Exportar tesis a Word/PDF | Media | 2 |
+| 4 | Gráficos de análisis reales | Media | 2 |
+| 5 | Tema oscuro/claro | Baja | 3 |
+
+**REMOVIDOS (single-user, no necesario):**
+- Registrar nuevos usuarios
+- Cambiar contraseña
 
 ---
 
@@ -81,7 +85,7 @@ Sistema de gestión de tesis que permite importar documentos Word, extraer autom
 |                     BACKEND (Python)                         |
 |  +--------------+  +----------------+  +---------------+    |
 |  |   Database   |  | WordExtractor  |  | ImportWorker  |    |
-|  |  (MariaDB)   |  |  (python-docx) |  |   (QThread)  |    |
+|  |  (SQLite)   |  |  (python-docx) |  |   (QThread)  |    |
 |  +--------------+  +----------------+  +---------------+    |
 +-------------------------------------------------------------+
 ```
@@ -191,14 +195,14 @@ Proyecto python/
 | Paquete | Version | Proposito |
 |---------|---------|-----------|
 | PySide6 | latest | Framework GUI |
-| mysql-connector-python | latest | Conexion MariaDB |
+| sqlite3 | (built-in) | Base de datos SQLite |
 | python-docx | latest | Extraccion de Word |
 
 ### 8.2 Requisitos del Sistema
 
 - Windows 10/11
 - Python 3.8+
-- MariaDB 10.4+ o MySQL 5.7+
+- No requiere servidor de base de datos (SQLite local)
 - 4GB RAM minimo
 
 ---
@@ -215,29 +219,18 @@ Proyecto python/
 
 ---
 
-## 10. Roadmap
+## 10. Roadmap (Actualizado 16/04/2026)
 
-### Fase 1: Funcional (Completado)
-- [x] Login con autenticacion
-- [x] Importar tesis desde Word
-- [x] Extraer datos (titulo, autor, resumen, referencias)
-- [x] Almacenar en MariaDB
-- [x] Busqueda de tesis
-
-### Fase 2: Gestion (Q2 2026)
-- [ ] Editar tesis
+### Fase 1: CRUD Tesis (Q2 2026) — PRIORIDAD ALTA
+- [ ] Editar tesis importada
 - [ ] Eliminar tesis
-- [ ] Registrar nuevos usuarios
-- [ ] Cambiar contrasena
 
-### Fase 3: Analisis (Q3 2026)
-- [ ] Graficos reales de estadisticas
-- [ ] Exportar a PDF
-- [ ] Exportar a Word
-- [ ] Dashboard avanzado
+### Fase 2: Export y Análisis (Q3 2026) — PRIORIDAD MEDIA
+- [ ] Exportar tesis a Word/PDF
+- [ ] Gráficos reales de estadísticas
 
-### Fase 4: Mejoras (Q4 2026)
-- [ ] Tema oscuro
+### Fase 3: UI/Theme (Q4 2026) — PRIORIDAD BAJA
+- [ ] Tema oscuro/claro
 - [ ] Aplicacion movil (futuro)
 - [ ] Sincronizacion en la nube (futuro)
 
@@ -259,9 +252,9 @@ Proyecto python/
 
 | # | Prueba | Estado |
 |---|--------|--------|
-| 1 | Librerias instaladas (PySide6, mysql, docx) | PASS |
-| 2 | Conexion a MariaDB | PASS |
-| 3 | Estructura de base de datos (4 tablas) | PASS |
+| 1 | Librerias instaladas (PySide6, docx) | PASS |
+| 2 | Conexion a SQLite | PASS |
+| 3 | Estructura de base de datos (5 tablas) | PASS |
 | 4 | Usuario admin en base de datos | PASS |
 | 5 | Login con credenciales correctas | PASS |
 | 6 | Login con credenciales incorrectas | PASS |
@@ -286,9 +279,9 @@ Proyecto python/
 | QThread | Clase de PySide6 para ejecutar operaciones en segundo plano |
 | QSS | Qt Style Sheets - Hojas de estilo para aplicaciones Qt |
 | CRUD | Create, Read, Update, Delete - Operaciones basicas de base de datos |
-| MariaDB | Sistema de gestion de bases de datos relacional |
+| SQLite | Sistema de base de datos local embebido |
 
 ---
 
 *Documento creado el 09/04/2026*
-*Ultima actualizacion: 09/04/2026*
+*Ultima actualizacion: 16/04/2026*

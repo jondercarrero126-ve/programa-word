@@ -17,15 +17,31 @@ class WordExtractor:
         return "Sin título"
 
     def get_author(self):
-        if self.doc.core_properties.author:
-            return self.doc.core_properties.author
-
-        for para in self.doc.paragraphs[:10]:
-            text = para.text.lower()
-            if "autor" in text or "presentado por" in text:
-                match = re.search(r"[:\-]\s*(.+?)(?:\n|$)", para.text)
+        # 1. Look for "Autor (a):" pattern in document FIRST (more reliable)
+        for para in self.doc.paragraphs:
+            text = para.text.strip()
+            if text.startswith("Autor"):
+                # Extract name after "Autor (a):" or "Autor:"
+                match = re.search(
+                    r"(?:Autor\s*(?:\([^)]+\))?:?)\s*(.+?)(?:\n|$)", text, re.IGNORECASE
+                )
                 if match:
                     return match.group(1).strip()
+
+        # 2. Check core properties (often contains email, not name)
+        if self.doc.core_properties.author:
+            # If it looks like an email, try to find real name from document
+            if "@" not in self.doc.core_properties.author:
+                return self.doc.core_properties.author
+
+        # 3. Fallback: look for "presentado por" pattern
+        for para in self.doc.paragraphs[:20]:
+            text = para.text.lower()
+            if "presentado por" in text:
+                match = re.search(r"presentado por\s*:?\s*(.+?)(?:\n|$)", text)
+                if match:
+                    return match.group(1).strip()
+
         return "Autor desconocido"
 
     def get_abstract(self):
@@ -150,10 +166,24 @@ class WordExtractor:
         return references
 
     def get_year(self):
-        for para in self.doc.paragraphs[:20]:
-            match = re.search(r"\b(19|20)\d{2}\b", para.text)
+        # Look for year in document (year often appears at the end like "Barinas, Julio 2025")
+        for para in self.doc.paragraphs:
+            text = para.text.strip()
+            # Match pattern "Month Year" like "Julio 2025"
+            match = re.search(
+                r"(?:Julio|Junio|Marzo|Abril|Mayo|Agosto|Septiembre|Octubre|Noviembre|Diciembre|Enero|Febrero)\s+(20\d{2}|19\d{2})",
+                text,
+                re.IGNORECASE,
+            )
             if match:
-                return int(match.group())
+                return int(match.group(1))
+
+            # Also try simple 4-digit year that looks reasonable
+            match = re.search(r"\b(20\d{2}|19\d{2})\b", text)
+            if match:
+                year = int(match.group(1))
+                if 1990 <= year <= 2030:  # Reasonable year range
+                    return year
         return None
 
     def extract_all(self):

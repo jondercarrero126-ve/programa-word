@@ -231,3 +231,27 @@ class TestTesisController:
         assert controller is not None
         assert controller.db is not None
         assert controller.usuario == usuario
+
+    def test_editar_tesis_existe(self):
+        """Verifica que el metodo editar_tesis existe en TesisController."""
+        from database import Database
+        from principal import TesisController
+
+        db = Database()
+        usuario = {"id_usuario": 1}
+        controller = TesisController(db, usuario)
+
+        assert hasattr(controller, "editar_tesis")
+        assert callable(controller.editar_tesis)
+
+    def test_eliminar_tesis_existe(self):
+        """Verifica que el metodo eliminar_tesis existe en TesisController."""
+        from database import Database
+        from principal import TesisController
+
+        db = Database()
+        usuario = {"id_usuario": 1}
+        controller = TesisController(db, usuario)
+
+        assert hasattr(controller, "eliminar_tesis")
+        assert callable(controller.eliminar_tesis)

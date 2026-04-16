@@ -16,11 +16,16 @@ from PySide6.QtWidgets import (
     QRadioButton,
     QListWidget,
     QGroupBox,
+    QDialog,
+    QDialogButtonBox,
+    QFormLayout,
 )
 from PySide6.QtCore import Qt, QThread, Signal, QObject
 from PySide6.QtGui import QFont
 from database import Database
 from word_extractor.extractor import WordExtractor
+from word_extractor.exporter import WordExporter
+from UI.theme.theme import get_theme_manager
 import os
 
 
@@ -280,6 +285,111 @@ class TesisController(QObject):
             "tesis_por_anio": [],
         }
 
+    def editar_tesis(self, id_tesis: int, datos: dict):
+        """Edita una tesis existente en la base de datos.
+
+        Args:
+            id_tesis: ID de la tesis a editar
+            datos: Diccionario con campos a actualizar: titulo, autor_principal, coautores,
+                   universidad, anio, resumen, palabras_clave
+
+        Signals:
+            tesis_changed: Emite la lista actualizada de tesis en caso de exito
+            error_occurred: Emite mensaje de error en caso de fallo
+        """
+        if self.db.connect():
+            try:
+                query = """
+                    UPDATE tesis SET 
+                        titulo = ?, 
+                        autor_principal = ?, 
+                        coautores = ?, 
+                        universidad = ?, 
+                        anio = ?, 
+                        resumen = ?, 
+                        palabras_clave = ?,
+                        fecha_actualizacion = CURRENT_TIMESTAMP
+                    WHERE id_tesis = ?
+                """
+                self.db.execute(
+                    query,
+                    (
+                        datos.get("titulo"),
+                        datos.get("autor_principal"),
+                        datos.get("coautores"),
+                        datos.get("universidad"),
+                        datos.get("anio"),
+                        datos.get("resumen"),
+                        datos.get("palabras_clave"),
+                        id_tesis,
+                    ),
+                )
+                self.db.disconnect()
+                self.cargar_tesis()
+            except Exception as e:
+                self.db.disconnect()
+                self.error_occurred.emit(f"Error al editar tesis: {str(e)}")
+        else:
+            self.error_occurred.emit("No se pudo conectar a la base de datos")
+
+    def eliminar_tesis(self, id_tesis: int):
+        """Elimina una tesis de la base de datos.
+
+        Args:
+            id_tesis: ID de la tesis a eliminar
+
+        Signals:
+            tesis_changed: Emite la lista actualizada de tesis en caso de exito
+            error_occurred: Emite mensaje de error en caso de fallo
+
+        Note:
+            Los capitulos y referencias relacionados se eliminan automaticamente
+            gracias a ON DELETE CASCADE configurado en la base de datos.
+        """
+        if self.db.connect():
+            try:
+                self.db.execute("DELETE FROM tesis WHERE id_tesis = ?", (id_tesis,))
+                self.db.disconnect()
+                self.cargar_tesis()
+            except Exception as e:
+                self.db.disconnect()
+                self.error_occurred.emit(f"Error al eliminar tesis: {str(e)}")
+        else:
+            self.error_occurred.emit("No se pudo conectar a la base de datos")
+
+    def obtener_tesis_por_estado(self) -> list:
+        """Obtiene estadísticas de tesis por estado.
+
+        Returns:
+            list: Lista de diccionarios con 'estado' y 'cantidad'
+        """
+        if self.db.connect():
+            try:
+                resultado = self.db.get_tesis_por_estado()
+                self.db.disconnect()
+                return resultado
+            except Exception:
+                self.db.disconnect()
+        return []
+
+    def obtener_tesis_por_autor(self, limite=10) -> list:
+        """Obtiene estadísticas de tesis por autor.
+
+        Args:
+            limite: Número máximo de autores a devolver
+
+        Returns:
+            list: Lista de diccionarios con 'autor_principal' y 'cantidad'
+        """
+        if self.db.connect():
+            try:
+                resultado = self.db.get_tesis_por_autor(limite)
+                self.db.disconnect()
+                return resultado
+            except Exception:
+                self.db.disconnect()
+        return []
+
 
 class Principal(QMainWindow, Ui_MainWindow):
     closed = Signal()
@@ -307,6 +417,12 @@ class Principal(QMainWindow, Ui_MainWindow):
 
         self.controller.cargar_tesis()
         self.controller.cargar_categorias()
+
+        # Crear contenedor para gráficos de análisis
+        self._crear_contenedor_graficos()
+
+        # Crear botón de cambio de tema
+        self._crear_boton_tema()
 
     def _crear_widgets_busquedas(self):
         self.input_nombre_categoria = QLineEdit()
@@ -395,6 +511,41 @@ class Principal(QMainWindow, Ui_MainWindow):
 
         self._conectar_widgets_categorias()
 
+    def _crear_contenedor_graficos(self):
+        """Crea el contenedor para los gráficos de análisis."""
+        from PySide6.QtWidgets import QWidget
+
+        # Buscar el widget de análisis en el stacked widget
+        analisis_index = self.MultiVentanas_Widget.indexOf(self.Analizis)
+        if analisis_index >= 0:
+            analisis_widget = self.MultiVentanas_Widget.widget(analisis_index)
+
+            # Crear un grupo para gráficos con botón de actualizar
+            from PySide6.QtWidgets import QWidget
+
+            self.grafico_container = QWidget()
+            grafico_layout = QVBoxLayout(self.grafico_container)
+            grafico_layout.setContentsMargins(0, 0, 0, 0)
+
+            # Botón para actualizar gráficos
+            btn_actualizar = QPushButton("Actualizar Gráficos")
+            btn_actualizar.setStyleSheet(
+                "background-color: #2196F3; color: white; padding: 8px 16px; border: none; border-radius: 5px; font-weight: bold;"
+            )
+            btn_actualizar.clicked.connect(self._mostrar_graficos_analisis)
+
+            # Insertar después del título y antes de la tabla
+            analisis_layout = analisis_widget.layout()
+
+            # Encontrar la posición correcta (después de titulo_analisis)
+            for i in range(analisis_layout.count()):
+                item = analisis_layout.itemAt(i)
+                if item.widget() == self.titulo_analisis:
+                    # Insertar después del título
+                    analisis_layout.insertWidget(i + 1, btn_actualizar)
+                    analisis_layout.insertWidget(i + 2, self.grafico_container)
+                    break
+
     def _conectar_widgets_categorias(self):
         if hasattr(self, "btn_crear_categoria"):
             self.btn_crear_categoria.clicked.connect(self._crear_categoria)
@@ -443,7 +594,7 @@ class Principal(QMainWindow, Ui_MainWindow):
         self.panel_nombre.clicked.connect(lambda: self._cambiar_pagina(0))
         self.Panel_icono.clicked.connect(lambda: self._cambiar_pagina(0))
         self.perfil_nombre.clicked.connect(lambda: self._cambiar_pagina(1))
-        self.Perfil_icono.clicked.connect(lambda: self._cambiar_pagina(1))
+        self.Personalizado_icono.clicked.connect(lambda: self._cambiar_pagina(1))
         self.analizis_nombre.clicked.connect(lambda: self._cambiar_pagina(2))
         self.Analizis_icono.clicked.connect(lambda: self._cambiar_pagina(2))
         self.noticias_nombre.clicked.connect(lambda: self._cambiar_pagina(3))
@@ -462,10 +613,35 @@ class Principal(QMainWindow, Ui_MainWindow):
         self.btn_importar.clicked.connect(self._importar_tesis)
         self.btn_test.clicked.connect(self._probar_conexion)
         self.btn_guardar.clicked.connect(self._guardar_config)
+
+        # Botón de exportar a Word (crear si no existe en UI)
+        self.btn_exportar_word = QPushButton("Exportar Word")
+        self.btn_exportar_word.setStyleSheet(
+            "background-color: #4CAF50; color: white; padding: 8px 16px; border: none; border-radius: 5px; font-weight: bold;"
+        )
+        self.btn_exportar_word.clicked.connect(self._exportar_tesis_word)
+
+        # Agregar al layout de botones de tesis (después del spacer y antes de Editar)
+        if hasattr(self, "botones_tesis_layout"):
+            # Insertar en posición 1 (después del spacer en posición 0)
+            self.botones_tesis_layout.insertWidget(1, self.btn_exportar_word)
+
+        # Conexion de seleccion de tabla para habilitar/deshabilitar botones
+        self.tabla_tesis.itemSelectionChanged.connect(
+            self._actualizar_estado_botones_tesis
+        )
+
         if hasattr(self, "btn_crear_categoria"):
             self.btn_crear_categoria.clicked.connect(self._crear_categoria)
             self.btn_preview.clicked.connect(self._preview_categoria)
             self.btn_quitar_filtro.clicked.connect(self._quitar_filtro)
+
+    def _actualizar_estado_botones_tesis(self):
+        """Habilita o deshabilita los botones Editar y Eliminar segun la seleccion."""
+        if hasattr(self, "btn_editar_tesis") and hasattr(self, "btn_eliminar_tesis"):
+            hay_seleccion = len(self.tabla_tesis.selectedItems()) > 0
+            self.btn_editar_tesis.setEnabled(hay_seleccion)
+            self.btn_eliminar_tesis.setEnabled(hay_seleccion)
 
     def _conectar_signals(self):
         self.controller.tesis_changed.connect(self._actualizar_tabla_tesis)
@@ -492,6 +668,10 @@ class Principal(QMainWindow, Ui_MainWindow):
         self.valor_refs.setText(f"Referencias: {stats.get('total_referencias', 0)}")
 
     def _actualizar_tabla_tesis(self, tesis):
+        # Seleccionar toda la fila al hacer click
+        self.tabla_tesis.setSelectionBehavior(QTableWidget.SelectRows)
+        self.tabla_tesis.setSelectionMode(QTableWidget.SingleSelection)
+
         self.tabla_tesis.setRowCount(len(tesis))
         for i, t in enumerate(tesis):
             self.tabla_tesis.setItem(i, 0, QTableWidgetItem(str(t["id_tesis"])))
@@ -681,6 +861,271 @@ class Principal(QMainWindow, Ui_MainWindow):
             self, "Exito", f"Tesis '{mensaje}' importada correctamente"
         )
         self._agregar_evento_historial("Tesis importada", mensaje, "success")
+
+    def _mostrar_dialogo_editar(self):
+        """Muestra el dialogo de edicion con los datos de la tesis seleccionada."""
+        row = self.tabla_tesis.currentRow()
+        if row < 0:
+            QMessageBox.warning(self, "Advertencia", "Seleccione una tesis para editar")
+            return
+
+        tesis_id = int(self.tabla_tesis.item(row, 0).text())
+        tesis = next(
+            (t for t in self.controller._tesis_cache if t["id_tesis"] == tesis_id),
+            None,
+        )
+
+        if not tesis:
+            self._mostrar_error("Tesis no encontrada")
+            return
+
+        dialog = QDialog(self)
+        dialog.setWindowTitle("Editar Tesis")
+        dialog.setMinimumSize(500, 400)
+
+        layout = QFormLayout(dialog)
+
+        input_titulo = QLineEdit(tesis.get("titulo", ""))
+        input_autor = QLineEdit(tesis.get("autor_principal", ""))
+        input_coautores = QLineEdit(tesis.get("coautores", ""))
+        input_universidad = QLineEdit(tesis.get("universidad", ""))
+        input_anio = QLineEdit(str(tesis.get("anio", "")) if tesis.get("anio") else "")
+        input_resumen = QLineEdit(tesis.get("resumen", ""))
+        input_palabras = QLineEdit(tesis.get("palabras_clave", ""))
+
+        layout.addRow("Titulo:", input_titulo)
+        layout.addRow("Autor Principal:", input_autor)
+        layout.addRow("Coautores:", input_coautores)
+        layout.addRow("Universidad:", input_universidad)
+        layout.addRow("Anio:", input_anio)
+        layout.addRow("Resumen:", input_resumen)
+        layout.addRow("Palabras Clave:", input_palabras)
+
+        buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        layout.addWidget(buttons)
+
+        buttons.accepted.connect(dialog.accept)
+        buttons.rejected.connect(dialog.reject)
+
+        if dialog.exec() == QDialog.Accepted:
+            datos = {
+                "titulo": input_titulo.text().strip(),
+                "autor_principal": input_autor.text().strip(),
+                "coautores": input_coautores.text().strip(),
+                "universidad": input_universidad.text().strip(),
+                "anio": int(input_anio.text()) if input_anio.text().strip() else None,
+                "resumen": input_resumen.text().strip(),
+                "palabras_clave": input_palabras.text().strip(),
+            }
+            self.controller.editar_tesis(tesis_id, datos)
+
+    def _editar_tesis(self):
+        """Slot para el boton Editar - abre el dialogo de edicion."""
+        self._mostrar_dialogo_editar()
+
+    def _eliminar_tesis(self):
+        """Slot para el boton Eliminar - confirma y elimina la tesis seleccionada."""
+        row = self.tabla_tesis.currentRow()
+        if row < 0:
+            QMessageBox.warning(
+                self, "Advertencia", "Seleccione una tesis para eliminar"
+            )
+            return
+
+        respuesta = QMessageBox.question(
+            self,
+            "Confirmar",
+            "¿Esta seguro de eliminar esta tesis? Se eliminaran tambien todos sus capitulos y referencias.",
+            QMessageBox.Yes | QMessageBox.No,
+        )
+
+        if respuesta == QMessageBox.Yes:
+            tesis_id = int(self.tabla_tesis.item(row, 0).text())
+            self.controller.eliminar_tesis(tesis_id)
+
+    def _exportar_tesis_word(self):
+        """Exporta la tesis seleccionada a documento Word."""
+        row = self.tabla_tesis.currentRow()
+        if row < 0:
+            QMessageBox.warning(
+                self, "Advertencia", "Seleccione una tesis para exportar"
+            )
+            return
+
+        tesis_id = int(self.tabla_tesis.item(row, 0).text())
+        tesis = next(
+            (t for t in self.controller._tesis_cache if t["id_tesis"] == tesis_id),
+            None,
+        )
+
+        if not tesis:
+            self._mostrar_error("Tesis no encontrada")
+            return
+
+        # Obtener capítulos y referencias
+        if not self.db.connect():
+            self._mostrar_error("No se pudo conectar a la base de datos")
+            return
+
+        try:
+            capitulos = self.db.fetch_all(
+                "SELECT titulo, contenido FROM capitulos WHERE id_tesis = ? ORDER BY orden",
+                (tesis_id,),
+            )
+            referencias = self.db.fetch_all(
+                "SELECT tipo, autor, titulo, anio, url FROM referencias WHERE id_tesis = ?",
+                (tesis_id,),
+            )
+            self.db.disconnect()
+        except Exception as e:
+            self.db.disconnect()
+            self._mostrar_error(f"Error al obtener datos: {str(e)}")
+            return
+
+        # Solicitar ubicación de guardado
+        default_name = f"{tesis.get('titulo', 'tesis')[:50].replace('/', '_')}.docx"
+        filepath, _ = QFileDialog.getSaveFileName(
+            self,
+            "Guardar documento Word",
+            default_name,
+            "Documentos Word (*.docx)",
+        )
+
+        if not filepath:
+            return
+
+        # Exportar
+        try:
+            exporter = WordExporter()
+            exporter.exportar(tesis, capitulos or [], referencias or [], filepath)
+            QMessageBox.information(self, "Éxito", f"Tesis exportada a:\n{filepath}")
+            self._agregar_evento_historial(
+                "Exportar a Word", f"Archivo: {os.path.basename(filepath)}", "success"
+            )
+        except Exception as e:
+            self._mostrar_error(f"Error al exportar: {str(e)}")
+
+    def _mostrar_graficos_analisis(self):
+        """Muestra gráficos reales en el panel de Análisis usando matplotlib."""
+        try:
+            import matplotlib
+
+            matplotlib.use("Agg")  # Non-interactive backend
+            from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
+            from matplotlib.figure import Figure
+        except ImportError:
+            QMessageBox.warning(
+                self,
+                "Dependencia faltante",
+                "Para mostrar gráficos, instale matplotlib:\npip install matplotlib",
+            )
+            return
+
+        # Limpiar widgets anteriores si existen
+        if hasattr(self, "grafico_container"):
+            while self.grafico_container.layout().count():
+                child = self.grafico_container.layout().takeAt(0)
+                if child.widget():
+                    child.widget().deleteLater()
+
+        # Crear figura
+        fig = Figure(figsize=(8, 6))
+        canvas = FigureCanvasQTAgg(fig)
+
+        # Obtener datos
+        tesis_por_estado = self.controller.obtener_tesis_por_estado()
+        tesis_por_autor = self.controller.obtener_tesis_por_autor()
+        tesis_por_anio = self.controller.obtener_estadisticas().get(
+            "tesis_por_anio", []
+        )
+
+        # Crear subplots
+        if tesis_por_estado or tesis_por_autor or tesis_por_anio:
+            # Gráfico de tesis por año
+            if tesis_por_anio:
+                ax1 = fig.add_subplot(2, 2, 1)
+                anios = [str(r.get("anio", "")) for r in tesis_por_anio]
+                cantidades = [r.get("cantidad", 0) for r in tesis_por_anio]
+                ax1.bar(anios, cantidades, color="#2196F3")
+                ax1.set_xlabel("Año")
+                ax1.set_ylabel("Cantidad de Tesis")
+                ax1.set_title("Tesis por Año")
+                ax1.tick_params(axis="x", rotation=45)
+
+            # Gráfico de tesis por estado
+            if tesis_por_estado:
+                ax2 = fig.add_subplot(2, 2, 2)
+                estados = [r.get("estado", "") for r in tesis_por_estado]
+                cantidades_est = [r.get("cantidad", 0) for r in tesis_por_estado]
+                ax2.pie(
+                    cantidades_est, labels=estados, autopct="%1.1f%%", startangle=90
+                )
+                ax2.set_title("Tesis por Estado")
+
+            # Gráfico de top autores
+            if tesis_por_autor:
+                ax3 = fig.add_subplot(2, 1, 2)
+                autores = [r.get("autor_principal", "")[:15] for r in tesis_por_autor]
+                cantidades_aut = [r.get("cantidad", 0) for r in tesis_por_autor]
+                ax3.barh(autores[::-1], cantidades_aut[::-1], color="#4CAF50")
+                ax3.set_xlabel("Cantidad de Tesis")
+                ax3.set_title("Top Autores")
+
+            fig.tight_layout()
+        else:
+            # Sin datos
+            ax = fig.add_subplot(1, 1, 1)
+            ax.text(0.5, 0.5, "No hay datos para mostrar", ha="center", va="center")
+            ax.set_xticks([])
+            ax.set_yticks([])
+
+        # Agregar al layout
+        self.grafico_container.layout().addWidget(canvas)
+        canvas.draw()
+
+    def _crear_boton_tema(self):
+        """Crea el botón para cambiar tema en la página de Ajustes."""
+        if hasattr(self, "btn_toggle_tema"):
+            return
+
+        # Obtener el layout de Ajustes
+        if hasattr(self, "ajustes_layout"):
+            # Crear grupo para tema
+            self.tema_group = QGroupBox("Apariencia")
+            tema_layout = QVBoxLayout()
+
+            # Crear botón toggle
+            self.btn_toggle_tema = QPushButton("Cambiar a Tema Oscuro")
+            self.btn_toggle_tema.setStyleSheet(
+                "background-color: #2196F3; color: white; padding: 10px 20px; "
+                "border: none; border-radius: 5px; font-weight: bold;"
+            )
+            self.btn_toggle_tema.clicked.connect(self._cambiar_tema)
+
+            tema_layout.addWidget(self.btn_toggle_tema)
+            self.tema_group.setLayout(tema_layout)
+
+            # Agregar al layout de Ajustes
+            self.ajustes_layout.insertWidget(2, self.tema_group)
+
+            # Actualizar texto según tema actual
+            self._actualizar_texto_boton_tema()
+
+    def _actualizar_texto_boton_tema(self):
+        """Actualiza el texto del botón según el tema actual."""
+        if hasattr(self, "btn_toggle_tema"):
+            theme_manager = get_theme_manager()
+            current = theme_manager.get_current_theme()
+            if current == "light":
+                self.btn_toggle_tema.setText("Cambiar a Tema Oscuro")
+            else:
+                self.btn_toggle_tema.setText("Cambiar a Tema Claro")
+
+    def _cambiar_tema(self):
+        """Cambia el tema de la aplicación."""
+        theme_manager = get_theme_manager()
+        theme_manager.toggle_theme()
+        self._actualizar_texto_boton_tema()
 
     def cerrar_sesion_accion(self):
         self.close()
