@@ -25,25 +25,7 @@ from PySide6.QtGui import QFont
 from database import Database
 from word_extractor.extractor import WordExtractor
 from word_extractor.exporter import WordExporter
-from UI.theme.theme import get_theme_manager
 import os
-
-
-class ImportWorker(QThread):
-    finished = Signal(dict)
-    error = Signal(str)
-
-    def __init__(self, filepath, parent=None):
-        super().__init__(parent)
-        self.filepath = filepath
-
-    def run(self):
-        try:
-            extractor = WordExtractor(self.filepath)
-            datos = extractor.extract_all()
-            self.finished.emit(datos)
-        except Exception as e:
-            self.error.emit(str(e))
 
 
 class TesisController(QObject):
@@ -420,9 +402,6 @@ class Principal(QMainWindow, Ui_MainWindow):
 
         # Crear contenedor para gráficos de análisis
         self._crear_contenedor_graficos()
-
-        # Crear botón de cambio de tema
-        self._crear_boton_tema()
 
     def _crear_widgets_busquedas(self):
         self.input_nombre_categoria = QLineEdit()
@@ -1082,50 +1061,6 @@ class Principal(QMainWindow, Ui_MainWindow):
         # Agregar al layout
         self.grafico_container.layout().addWidget(canvas)
         canvas.draw()
-
-    def _crear_boton_tema(self):
-        """Crea el botón para cambiar tema en la página de Ajustes."""
-        if hasattr(self, "btn_toggle_tema"):
-            return
-
-        # Obtener el layout de Ajustes
-        if hasattr(self, "ajustes_layout"):
-            # Crear grupo para tema
-            self.tema_group = QGroupBox("Apariencia")
-            tema_layout = QVBoxLayout()
-
-            # Crear botón toggle
-            self.btn_toggle_tema = QPushButton("Cambiar a Tema Oscuro")
-            self.btn_toggle_tema.setStyleSheet(
-                "background-color: #2196F3; color: white; padding: 10px 20px; "
-                "border: none; border-radius: 5px; font-weight: bold;"
-            )
-            self.btn_toggle_tema.clicked.connect(self._cambiar_tema)
-
-            tema_layout.addWidget(self.btn_toggle_tema)
-            self.tema_group.setLayout(tema_layout)
-
-            # Agregar al layout de Ajustes
-            self.ajustes_layout.insertWidget(2, self.tema_group)
-
-            # Actualizar texto según tema actual
-            self._actualizar_texto_boton_tema()
-
-    def _actualizar_texto_boton_tema(self):
-        """Actualiza el texto del botón según el tema actual."""
-        if hasattr(self, "btn_toggle_tema"):
-            theme_manager = get_theme_manager()
-            current = theme_manager.get_current_theme()
-            if current == "light":
-                self.btn_toggle_tema.setText("Cambiar a Tema Oscuro")
-            else:
-                self.btn_toggle_tema.setText("Cambiar a Tema Claro")
-
-    def _cambiar_tema(self):
-        """Cambia el tema de la aplicación."""
-        theme_manager = get_theme_manager()
-        theme_manager.toggle_theme()
-        self._actualizar_texto_boton_tema()
 
     def cerrar_sesion_accion(self):
         self.close()

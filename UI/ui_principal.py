@@ -63,14 +63,14 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-import UI.recursos_rc
+from UI.recursos_rc import *
 
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(900, 600)
+        MainWindow.resize(629, 575)
         sizePolicy = QSizePolicy(
             QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred
         )
@@ -458,8 +458,8 @@ class Ui_MainWindow(object):
 
         self.btn_editar_tesis = QPushButton(self.Panel)
         self.btn_editar_tesis.setObjectName("btn_editar_tesis")
-        self.btn_editar_tesis.setMinimumSize(QSize(120, 35))
         self.btn_editar_tesis.setEnabled(False)
+        self.btn_editar_tesis.setMinimumSize(QSize(120, 35))
         self.btn_editar_tesis.setStyleSheet(
             "background-color: #FF9800; color: white; padding: 8px 16px; border: none; border-radius: 5px; font-weight: bold;"
         )
@@ -468,8 +468,8 @@ class Ui_MainWindow(object):
 
         self.btn_eliminar_tesis = QPushButton(self.Panel)
         self.btn_eliminar_tesis.setObjectName("btn_eliminar_tesis")
-        self.btn_eliminar_tesis.setMinimumSize(QSize(120, 35))
         self.btn_eliminar_tesis.setEnabled(False)
+        self.btn_eliminar_tesis.setMinimumSize(QSize(120, 35))
         self.btn_eliminar_tesis.setStyleSheet(
             "background-color: #F44336; color: white; padding: 8px 16px; border: none; border-radius: 5px; font-weight: bold;"
         )
@@ -612,7 +612,7 @@ class Ui_MainWindow(object):
         self.historial_scroll.setWidgetResizable(True)
         self.historial_container = QWidget()
         self.historial_container.setObjectName("historial_container")
-        self.historial_container.setGeometry(QRect(0, 0, 441, 377))
+        self.historial_container.setGeometry(QRect(0, 0, 100, 350))
         self.historial_layout = QVBoxLayout(self.historial_container)
         self.historial_layout.setObjectName("historial_layout")
         self.historial_scroll.setWidget(self.historial_container)
@@ -729,7 +729,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName("menubar")
-        self.menubar.setGeometry(QRect(0, 0, 728, 33))
+        self.menubar.setGeometry(QRect(0, 0, 629, 33))
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
